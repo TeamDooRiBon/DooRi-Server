@@ -1,0 +1,26 @@
+{
+  "name": "soptkathon",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "nodemon",
+    "dev": "ts-node src",
+    "build": "tsc && node dist"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/express": "^4.17.11",
+    "@types/mongoose": "^5.10.5",
+    "@types/node": "^15.6.0",
+    "nodemon": "^2.0.7",   
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "dependencies": {
+    "dotenv": "^9.0.2",
+    "express": "^4.17.1",
+    "mongoose": "^5.12.10"
+  }
+}
