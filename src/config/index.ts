@@ -23,9 +23,9 @@ export default {
 
   /**
    * Your secret sauce
-
+  **/
   jwtSecret: process.env.JWT_SECRET,
   jwtAlgorithm: process.env.JWT_ALGO,
-  **/
+ 
 
 };
