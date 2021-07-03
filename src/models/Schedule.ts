@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ISchedule, ISchedules } from "../interfaces/ISchedule";
+import { ISchedules } from "../interfaces/ISchedule";
 
 const ScheduleSchema = new mongoose.Schema({
     title : {
