@@ -6,7 +6,7 @@ export interface IGroup {
     boards: mongoose.Types.ObjectId;
     wishes: mongoose.Types.ObjectId;
     inviteCode: String;
-    host: String;
+    host: mongoose.Types.ObjectId;
     travelName: String;
     destination: String;
     startDate: Date;
