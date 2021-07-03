@@ -19,6 +19,15 @@ const ScheduleSchema = new mongoose.Schema({
     },
     memo : {
         type : String
+    },
+    writer : {
+        type: mongoose.Types.ObjectId,
+        requried : true
+    },
+    createdAt : {
+        type : Date,
+        default : Date.now,
+        required : true
     }
 });
 

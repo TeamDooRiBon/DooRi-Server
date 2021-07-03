@@ -6,6 +6,8 @@ export interface ISchedule {
     endTime : Date;
     location : string;
     memo : string;
+    writer : mongoose.Types.ObjectId;
+    createdAt : Date;
 }
 
 export interface ISchedules {
