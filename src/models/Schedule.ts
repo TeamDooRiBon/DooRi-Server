@@ -23,10 +23,6 @@ const ScheduleSchema = new mongoose.Schema({
 });
 
 const SchedulesSchema = new mongoose.Schema({
-    groupId : {
-        type : mongoose.SchemaTypes.ObjectId,
-        ref : "Group"
-    },
     schedules : [ScheduleSchema]
 });
 

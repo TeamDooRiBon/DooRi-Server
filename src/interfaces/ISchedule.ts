@@ -9,6 +9,5 @@ export interface ISchedule {
 }
 
 export interface ISchedules {
-    groupId : mongoose.Types.ObjectId;
     schedules : [ISchedule]
 }
