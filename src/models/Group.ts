@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 import { IGroup } from "../interfaces/IGroup";
-import { ISchedule, ISchedules } from "../interfaces/ISchedule";
 
 const GroupSchema = new mongoose.Schema({
     members: [{
@@ -24,8 +23,8 @@ const GroupSchema = new mongoose.Schema({
         required: true
     },
     host: {
-        type: String,
-        required: true
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "User"
     },
     travelName: {
         type: String,
