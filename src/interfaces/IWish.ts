@@ -1,10 +1,16 @@
 import mongoose from "mongoose";
-import { IWishList } from "./IWishList";
+
+export interface ILike {
+    user: mongoose.Types.ObjectId;
+}
+
+export interface IWishList {
+    poster: mongoose.Types.ObjectId;
+    tag: string;
+    content: string;
+    likes: [ILike];
+}
 
 export interface IWish {
     post: [IWishList];
-}
-
-export interface IWishInputDTO {
-    post: IWishList;
 }

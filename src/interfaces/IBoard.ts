@@ -1,6 +1,15 @@
 import mongoose from "mongoose";
-import { IBoardInterestList } from "./IBoardInterestList";
-import { IBoardPostList } from "./IBoardPostList";
+
+export interface IBoardInterestList {
+    member: mongoose.Types.ObjectId;
+    choice: string;
+}
+
+export interface IBoardPostList {
+    poster: mongoose.Types.ObjectId;
+    tag: string;
+    content: string;
+}
 
 export interface IBoard {
     post: [IBoardPostList];

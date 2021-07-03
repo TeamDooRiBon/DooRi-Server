@@ -13,11 +13,19 @@ const PostSchema = new mongoose.Schema({
     content: {
         type: String,
         required: true
-    }
+    },
+    likes: [
+        {
+            user: {
+                type: mongoose.Types.ObjectId,
+                ref: "User",
+            },
+        },
+    ],
 });
 
 const WishSchema = new mongoose.Schema({
-    post: [PostSchema]
+    post: [PostSchema],
 });
 
 export default mongoose.model<IWish & mongoose.Document>("Wish", WishSchema);
