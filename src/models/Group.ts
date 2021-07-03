@@ -20,7 +20,8 @@ const GroupSchema = new mongoose.Schema({
     },
     inviteCode: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     host: {
         type: mongoose.SchemaTypes.ObjectId,
