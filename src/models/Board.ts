@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { IBoard } from "../interfaces/IBoard";
 
 const BoardPostSchema = new mongoose.Schema({
-    poster: {
+    writer: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "User",
     },

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 import { IWish } from "../interfaces/IWish";
 
 const PostSchema = new mongoose.Schema({
-    poster: {
+    writer: {
         type: mongoose.SchemaTypes.ObjectId,
         ref: "User",
     },

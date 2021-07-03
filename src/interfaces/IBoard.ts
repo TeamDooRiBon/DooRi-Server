@@ -6,7 +6,7 @@ export interface IBoardInterestList {
 }
 
 export interface IBoardPostList {
-    poster: mongoose.Types.ObjectId;
+    writer: mongoose.Types.ObjectId;
     tag: string;
     content: string;
 }

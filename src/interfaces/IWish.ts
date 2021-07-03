@@ -5,7 +5,7 @@ export interface ILike {
 }
 
 export interface IWishList {
-    poster: mongoose.Types.ObjectId;
+    writer: mongoose.Types.ObjectId;
     tag: string;
     content: string;
     likes: [ILike];
