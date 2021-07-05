@@ -18,9 +18,9 @@ const findTravelByDate = async (data: userSearchInput) => {
         const user = await User.findOne({_id: data});
         const groupIds = user.groups;
 
-        const nowTravels = await Group.find({_id : {$in : groupIds}, startDate : {$lte : date}, endDate : {$gte : date}}).sort({startDate : 1});
-        const comeTravels = await Group.find({_id : {$in : groupIds}, startDate : {$gte : date}}).sort({startDate : 1});
-        const endTravels = await Group.find({_id : {$in : groupIds}, endDate : {$lte : date}}).sort({startDate : 1});
+        const nowTravels = await Group.find({_id : {$in : groupIds}, startDate : {$lte : date}, endDate : {$gte : date}}).sort({startDate : 1}).populate("members", ["name"]);
+        const comeTravels = await Group.find({_id : {$in : groupIds}, startDate : {$gte : date}}).sort({startDate : 1}).populate("members", ["name"]);
+        const endTravels = await Group.find({_id : {$in : groupIds}, endDate : {$lte : date}}).sort({startDate : 1}).populate("members", ["name"]);
 
         return {nowTravels, comeTravels, endTravels};
     } catch (error) {
