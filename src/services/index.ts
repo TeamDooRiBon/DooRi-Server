@@ -1,4 +1,7 @@
 //service index file
-export {
 
+import mainService from "./mainService";
+
+export {
+    mainService
 }
