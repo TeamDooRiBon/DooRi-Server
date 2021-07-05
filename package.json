@@ -23,10 +23,6 @@
     "dotenv": "^9.0.2",
     "express": "^4.17.1",
     "express-validator": "^6.12.0",
-<<<<<<< HEAD
-    "gravatar": "^1.8.1",
-=======
->>>>>>> 526a53d0c11ea70a09ea0ce1d7448e64296817c9
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.12.10",
     "nanoid": "^3.1.23"
