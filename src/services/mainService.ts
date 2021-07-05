@@ -13,11 +13,16 @@ const findUser = async (data: userSearchInput) => {
     }
 }
 
-//const profiles = await User.find().select({result: {$elemMatch: {'name': '변주현' }}});
-
-const findTravelByDate = async (data: userSearchInput, index: Number) => { // 0: 현재 여행, 1: 다가오는 여행, 2: 지나간 여행
+const findTravelByDate = async (data: userSearchInput) => {
     try {
-        const travels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"]).select({groups: {$lte: {'startDate': Date.now}}});
+        const nowTravels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"])
+        .select({groups: {$lte: {'startDate': Date.now}}}).select({groups: {$gte: {'endDate': Date.now}}});
+        const comeTravels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"])
+        .select({groups: {$gte: {'startDate': Date.now}}});
+        const endTravels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"])
+        .select({groups: {$lte: {'endDate': Date.now}}});
+
+        return {nowTravels, comeTravels, endTravels};
     } catch (error) {
         console.log(error);
         throw error;
