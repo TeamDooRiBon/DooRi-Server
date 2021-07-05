@@ -13,3 +13,13 @@ export interface IGroup {
     endDate: Date;
     image: String;
 } 
+
+export interface IGruopInputDTO {
+    host: mongoose.Types.ObjectId;
+    inviteCode: String;
+    travelName: String;
+    destination: String;
+    startDate: Date;
+    endDate: Date;
+    image: String;
+}
