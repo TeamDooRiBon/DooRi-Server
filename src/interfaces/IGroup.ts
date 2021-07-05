@@ -12,14 +12,14 @@ export interface IGroup {
     startDate: Date;
     endDate: Date;
     image: String;
-}
+} 
 
-export interface findGroupByDateDTO {
-    //_id: mongoose.Types.ObjectId;
-    members: [mongoose.Types.ObjectId];
-    startDate: Date;
-    endDate: Date;
+export interface IGruopInputDTO {
+    host: mongoose.Types.ObjectId;
+    inviteCode: String;
     travelName: String;
     destination: String;
+    startDate: Date;
+    endDate: Date;
     image: String;
 }
