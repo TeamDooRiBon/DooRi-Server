@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import config from "../config";
 const sc = require('../modules/statusCode');
+import gravatar from 'gravatar';
 import { check, validationResult } from "express-validator";
 import { mainService } from "../services";
 
@@ -16,67 +17,13 @@ const getTravel = async (req: Request, res: Response) => {
                 })
         };
         const travels = await mainService.findTravelByDate({ _id: user._id });
-        //let travelArray: Object[] = [travels.nowTravels, travels.comeTravels, travels.endTravels];
-        const whenTravel = ["nowTravels", "comeTravels", "endTravels"];
-
-        let allTravels = new Map();
-        for (let i = 0; i < 3; i++) {
-            allTravels.set(whenTravel[i], []);
-        }
-
-        for(let i = 0; i < travels.nowTravels.length; i++) {
-            let memberNames = []
-            for(let k = 0; k < travels.nowTravels[i].members.length; k++) {
-                memberNames.push(travels.nowTravels[i].members[k]);
-            }
-            let nowTravelData = {
-                _id: travels.nowTravels[i]._id,
-                startDate: travels.nowTravels[i].startDate,
-                endDate: travels.nowTravels[i].endDate,
-                travelName: travels.nowTravels[i].travelName,
-                destination: travels.nowTravels[i].destination,
-                members: memberNames
-            };
-            allTravels.get("nowTravels").push(nowTravelData);
-        }
-
-        for(let i = 0; i < travels.comeTravels.length; i++) {
-            let memberNames = []
-            for(let k = 0; k < travels.comeTravels[i].members.length; k++) {
-                memberNames.push(travels.comeTravels[i].members[k]);
-            }
-            let comeTravelData = {
-                _id: travels.comeTravels[i]._id,
-                startDate: travels.comeTravels[i].startDate,
-                endDate: travels.comeTravels[i].endDate,
-                travelName: travels.comeTravels[i].travelName,
-                destination: travels.comeTravels[i].destination,
-                members: memberNames
-            };
-            allTravels.get("comeTravels").push(comeTravelData);
-        }
-        
-        for(let i = 0; i < travels.endTravels.length; i++) {
-            let memberNames = []
-            for(let k = 0; k < travels.endTravels[i].members.length; k++) {
-                memberNames.push(travels.endTravels[i].members[k]);
-            }
-            let endTravelData = {
-                _id: travels.endTravels[i]._id,
-                startDate: travels.endTravels[i].startDate,
-                endDate: travels.endTravels[i].endDate,
-                travelName: travels.endTravels[i].travelName,
-                destination: travels.endTravels[i].destination,
-                members: memberNames
-            };
-            allTravels.get("endTravels").push(endTravelData);
-        }
+        let travelArray: Object[] = [travels.nowTravels, travels.comeTravels, travels.endTravels];
 
         return res.status(200).json({
             status: sc.OK,
             success: true,
             message: "여행 조회 성공",
-            data: 
+            data: travelArray
         })
     } catch (err) {
         console.log(err);
