@@ -1,27 +1,49 @@
-import Schedule from "../models/Schedule";
 import Group from "../models/Group";
-import { IScheduleInputDTO } from "../interfaces/ISchedule";
+import { IGruopInputDTO } from "../interfaces/IGroup";
+import { group } from "console";
 
-
-const findGroup = async (data : IScheduleInputDTO) => {
-    const { groupId, title, startTime, endTime, location, memo, writer } = data;
-
-    try { 
-        const schedules = new Schedule({
-            schedules : [{ title, startTime, endTime, location, memo, writer }]
+const createGroup = async (data : IGruopInputDTO) => {
+    const {
+        host, inviteCode, travelName, destination,
+        startDate, endDate, image
+    } = data;
+    try {
+        const group = await Group.create({
+            members: [], schedules: null, boards: null, 
+            wishes: null, host, inviteCode, 
+            travelName, destination, 
+            startDate, endDate, image
         });
-        await Group.findByIdAndUpdate(groupId , { $set : { schedules : schedules._id }});
-
-        return;
+        return group;
     } catch (error) {
         console.log(error);
         throw error;
-    }
-}
+    } 
+};
 
+// 이거 findGroupByInviteCode 로 바꾸면 좋을 것 같긴 합니다 (to 정디 ^__^)
+const findGroup = async (code: String) => {
+    try {
+        const gruop = await Group.find({inviteCode : code});
+        return group;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } 
+};
 
+const findGroupById = async (code: String) => {
+    try {
+        const gruop = await Group.find({_id : code});
+        return group;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } 
+};
 
 export default {
-    createSchedule,
-    addSchedule
-}
+    createGroup,
+    findGroup,
+    findGroupById
+} 

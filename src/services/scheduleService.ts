@@ -11,7 +11,7 @@ const createSchedule = async (data : IScheduleInputDTO) => {
             schedules : [{ title, startTime, endTime, location, memo, writer }]
         });
         await Group.findByIdAndUpdate(groupId , { $set : { schedules : schedules._id }});
-
+        await schedules.save();
         return;
     } catch (error) {
         console.log(error);

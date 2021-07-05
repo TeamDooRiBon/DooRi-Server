@@ -19,8 +19,7 @@ export interface IScheduleInputDTO {
     title : string;
     startTime : Date;
     endTime : Date;
-    location : string;
-    memo : string;
+    location? : string;
+    memo? : string;
     writer : mongoose.Types.ObjectId;
-    createdAt : Date;
 }

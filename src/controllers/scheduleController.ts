@@ -1,7 +1,8 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
 const { validationResult } = require('express-validator');
-import { scheduleService } from "../services";
+import { groupService, scheduleService } from "../services";
+import mongoose from "mongoose";
 
 const makeSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
@@ -14,28 +15,21 @@ const makeSchedule = async (req: Request, res: Response) => {
     }
     try {
         const { title, startTime, endTime, location, memo } = req.body;
-        const writer = req.body.user;
+        const writer = req.body.writer;
+        const groupId = req.params.groupId;
+        const group = await groupService.findGroupById(groupId);
+        const data = { groupId : mongoose.Types.ObjectId(groupId), title, startTime, endTime, location, memo, writer };
 
-
-        let group = await groupService.findGroup(inviteCode);
-        while (group.length) {  
-            //group이 이미 존재한다면 중복된 참여코드이므로 새로 생성해준다.
-            inviteCode = generateCode();
-            group = await groupService.findGroup(inviteCode);
+        if (group["schedules"] === null) {
+            await scheduleService.createSchedule(data);
         }
-        const groupImage = image[imageIndex];  //해당 인덱스의 이미지 주소 로드
-        const newGroup = await groupService.createGroup({ 
-            host: user._id, inviteCode, travelName, 
-            destination, startDate, endDate, 
-            image: groupImage
-        });  // 새로운 여행 그룹 생성
+        else {
+            await scheduleService.addSchedule(data);
+        }
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "참여 코드 생성 성공",
-            data: {
-                "inviteCode": inviteCode
-            }
+            message: "스케쥴 생성 성공"
         });
     } catch (error) {
         console.log(error);
@@ -44,5 +38,5 @@ const makeSchedule = async (req: Request, res: Response) => {
 };  
 
 export default {
-    makeTravel
+    makeSchedule
 } 
