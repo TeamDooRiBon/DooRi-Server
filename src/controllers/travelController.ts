@@ -38,8 +38,8 @@ const makeTravel = async (req: Request, res: Response) => {
                 "inviteCode": inviteCode
             }
         });
-    } catch (err) {
-        console.log(err);
+    } catch (error) {
+        console.log(error);
         res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
     }
 };  
