@@ -1,5 +1,4 @@
 import { userSearchInput } from "../interfaces/IUser";
-import { findGroupByDateDTO } from "../interfaces/IGroup";
 import User from "../models/User";
 import Group from "../models/Group";
 
@@ -30,5 +29,6 @@ const findTravelByDate = async (data: userSearchInput) => {
 }
 
 export default {
-    findUser
+    findUser,
+    findTravelByDate
 };

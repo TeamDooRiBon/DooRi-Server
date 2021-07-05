@@ -4,6 +4,6 @@ import auth from '../middleware/auth';
 
 const router = Router();
 
-router.get('/', auth, mainController.travel);
+router.get('/', auth, mainController.getTravel);
 
 export default router;

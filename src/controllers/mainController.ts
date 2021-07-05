@@ -5,7 +5,7 @@ import gravatar from 'gravatar';
 import { check, validationResult } from "express-validator";
 import { mainService } from "../services";
 
-const travel = async (req: Request, res: Response) => {
+const getTravel = async (req: Request, res: Response) => {
     const user = req.body.user;
     try{
         const foundUser = await mainService.findUser({ _id: user._id });
@@ -16,10 +16,15 @@ const travel = async (req: Request, res: Response) => {
                     message: "유효하지 않은 사용자"
                 })
         };
-        const nowTravel = await mainService.
+        const travels = await mainService.findTravelByDate({ _id: user._id });
+        let travelArray: Object[] = [travels.nowTravels, travels.comeTravels, travels.endTravels];
 
-        
-        // data안에 groupId, startDate, endDate, image, destination, members를 각각 0, 1, 2로 묶어서 json객체로 만들어줌
+        return res.status(200).json({
+            status: sc.OK,
+            success: true,
+            message: "여행 조회 성공",
+            data: travelArray
+        })
     } catch (err) {
         console.log(err);
         res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
@@ -27,5 +32,5 @@ const travel = async (req: Request, res: Response) => {
 }
 
 export default {
-    travel
+    getTravel
 }
