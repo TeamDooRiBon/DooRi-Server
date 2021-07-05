@@ -15,10 +15,13 @@ const findUser = async (data: userSearchInput) => {
 const findTravelByDate = async (data: userSearchInput) => {
     try {
         const nowTravels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"])
+        .populate("user", ["name"])
         .select({groups: {$lte: {'startDate': Date.now}}}).select({groups: {$gte: {'endDate': Date.now}}});
         const comeTravels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"])
+        .populate("user", ["name"])
         .select({groups: {$gte: {'startDate': Date.now}}});
         const endTravels = await User.find({userId: data}).populate("group", ["startDate", "endDate", "image", "destination", "members"])
+        .populate("user", ["name"])
         .select({groups: {$lte: {'endDate': Date.now}}});
 
         return {nowTravels, comeTravels, endTravels};
