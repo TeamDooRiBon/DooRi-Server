@@ -1,14 +1,11 @@
 import express, { NextFunction, Request, Response } from "express";
-import config from "../config";
 const sc = require('../modules/statusCode');
-import gravatar from 'gravatar';
-import { check, validationResult } from "express-validator";
-import { mainService } from "../services";
+import { mainService, userService } from "../services";
 
 const getTravel = async (req: Request, res: Response) => {
     const user = req.body.user;
     try{
-        const foundUser = await mainService.findUser({ _id: user._id });
+        const foundUser = await userService.findUser({ _id: user._id });
         if(!foundUser) {
             return res.status(404).json({
                     status: sc.NOT_FOUND,
