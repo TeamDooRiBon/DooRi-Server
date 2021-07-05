@@ -13,13 +13,3 @@ export interface ISchedule {
 export interface ISchedules {
     schedules : [ISchedule]
 }
-
-export interface IScheduleInputDTO {
-    groupId: mongoose.Types.ObjectId;
-    title : string;
-    startTime : Date;
-    endTime : Date;
-    location? : string;
-    memo? : string;
-    writer : mongoose.Types.ObjectId;
-}
