@@ -8,12 +8,13 @@ const createGroup = async (data : IGruopInputDTO) => {
         startDate, endDate, image
     } = data;
     try {
-        const group = await Group.create({
+        const group = new Group({
             members: [], schedules: null, boards: null, 
             wishes: null, host, inviteCode, 
             travelName, destination, 
             startDate, endDate, image
         });
+        group.save();
         return group;
     } catch (error) {
         console.log(error);
