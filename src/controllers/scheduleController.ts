@@ -195,7 +195,8 @@ const editSchedule = async (req: Request, res: Response) => {
         res.status(sc.INTERNAL_SERVER_ERROR).json({ 
             status: sc.INTERNAL_SERVER_ERROR, 
             success: false, 
-            message: "서버 내부 오류" });
+            message: "서버 내부 오류" 
+        });
     }
 };  
 
