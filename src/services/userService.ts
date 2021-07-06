@@ -1,6 +1,5 @@
 import { IUserInputDTO, userSearchInput } from "../interfaces/IUser";
 import User from "../models/User";
-
 const findUserById = async (userId: String) => {
     try {
         const user = await User.findById(userId);
@@ -10,7 +9,6 @@ const findUserById = async (userId: String) => {
         throw error;
     }
 };
-
 const findUserByEmail = async (data: userSearchInput) => {
     try {
         const user = await User.findOne({ email: data.email });
@@ -20,7 +18,6 @@ const findUserByEmail = async (data: userSearchInput) => {
         throw error;
     }
 };
-
 const createUser = async (data: IUserInputDTO) => {
     const {
         name, email, profileImage
@@ -36,7 +33,6 @@ const createUser = async (data: IUserInputDTO) => {
         throw error;
     }
 };
-
 export default {
     findUserById,
     findUserByEmail,
