@@ -34,8 +34,19 @@ const addSchedule = async (data : IScheduleInputDTO) => {
     }
 }
 
+const findSchedulesById = async (id: String) => {
+    try {
+        const schedule = await Schedule.findById(id);
+        return schedule;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 
 export default {
     createSchedule,
-    addSchedule
+    addSchedule,
+    findSchedulesById
 }
