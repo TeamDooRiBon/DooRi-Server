@@ -18,11 +18,11 @@ const makeTravel = async (req: Request, res: Response) => {
         const { travelName, destination, startDate, endDate, imageIndex } = req.body;
         const user = req.body.user;
         let inviteCode = generateCode();  //첫 무작위 참여 코드 6자리 생성
-        let group = await groupService.findGroup(inviteCode);
+        let group = await groupService.findGroupByInviteCode(inviteCode);
         while (group.length) {  
             //group이 이미 존재한다면 중복된 참여코드이므로 새로 생성해준다.
             inviteCode = generateCode();
-            group = await groupService.findGroup(inviteCode);
+            group = await groupService.findGroupByInviteCode(inviteCode);
         }
         const groupImage = image[imageIndex];  //해당 인덱스의 이미지 주소 로드
         const newGroup = await groupService.createGroup({ 

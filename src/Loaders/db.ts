@@ -10,8 +10,8 @@ const connectDB = async () => {
     });
 
     console.log("Mongoose Connected ...");
-  } catch (err) {
-    console.error(err.message);
+  } catch (error) {
+    console.error(error.message);
     process.exit(1);
   }
 };
