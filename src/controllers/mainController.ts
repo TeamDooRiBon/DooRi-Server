@@ -1,7 +1,5 @@
-import express, { NextFunction, Request, Response } from "express";
-import config from "../config";
+import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
-import { check, validationResult } from "express-validator";
 import { mainService } from "../services";
 
 const getTravel = async (req: Request, res: Response) => {
