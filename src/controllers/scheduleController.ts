@@ -122,7 +122,6 @@ const getOneSchedule = async (req: Request, res: Response) => {
         const schedule = scheduleTable.schedules.filter(function (schedule) {
             return String(schedule._id) === req.params.scheduleId 
         })[0];
-
         const user = await userService.findUserById(String(schedule.writer));
 
         const writer = {
