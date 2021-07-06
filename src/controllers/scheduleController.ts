@@ -67,13 +67,16 @@ const getDailySchedule = async (req: Request, res: Response) => {
         const schedules = scheduleArray.sort(function (a, b) {
             return a.startTime - b.startTime;
         });
+        
         const data = { day, date, schedules }; 
+        
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
             message: "일정 조회 성공",
             data
         });
+
     } catch (error) {
         console.log(error);
         res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
