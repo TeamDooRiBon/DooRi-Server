@@ -4,6 +4,6 @@ import auth from '../middleware/auth';
 
 const router = Router();
 
-router.post('/', auth, scheduleController.makeSchedule);
+router.post('/:group-id', auth, scheduleController.makeSchedule);
 
 export default router;
