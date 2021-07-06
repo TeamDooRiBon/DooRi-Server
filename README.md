@@ -25,6 +25,7 @@
 <img src="https://img.shields.io/badge/Node.js-v14-green"/> <img src="https://img.shields.io/badge/Mongoose-v5.12.10-blue"/> <img src="https://img.shields.io/badge/Express-v4.17.1-green"/> <img src="https://img.shields.io/badge/Typescript-v4.2.4-blue"/>  
 
 ### 🛠 Server Architecture
+![image](https://user-images.githubusercontent.com/20807197/124567491-0457ae00-de7f-11eb-8a40-b67ee7382f9c.png)
 
 ### ⚙️ Dependencies Module
 ```
