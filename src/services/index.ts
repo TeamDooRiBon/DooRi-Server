@@ -1,7 +1,7 @@
-import scheduleService from "./scheduleService"
 import groupService from "./groupService"
+import mainService from "./mainService"
 //service index file
 export {
     groupService,
-    scheduleService
+    mainService
 }

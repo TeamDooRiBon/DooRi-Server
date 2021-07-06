@@ -1,11 +1,11 @@
 //router index file
 import { Router } from 'express';
 import travelRouter from './travelRouter';
-import scheduleRouter from './scheduleRouter';
+import mainRouter from './mainRouter';
 
 const router = Router();
 
 router.use('/travel', travelRouter);
-router.use('/schedule', scheduleRouter);
+router.use('/travel', mainRouter);
 
 export default router;

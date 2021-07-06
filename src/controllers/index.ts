@@ -1,7 +1,7 @@
 import travelController from "./travelController"
-import scheduleController from "./scheduleController"
+import mainController from "./mainController"
 // controller index file
 export {
     travelController,
-    scheduleController
+    mainController
 }

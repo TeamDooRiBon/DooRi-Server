@@ -6,3 +6,7 @@ export interface IUser {
     profileImage: String;
     groups: [mongoose.Types.ObjectId];
 } 
+
+export interface userSearchInput {
+    _id : mongoose.Types.ObjectId;
+}
