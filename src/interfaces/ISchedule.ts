@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 export interface ISchedule {
+    _id? : mongoose.Types.ObjectId;
     title : string;
     startTime : Date;
     endTime : Date;
