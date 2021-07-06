@@ -45,6 +45,14 @@ const makeTravel = async (req: Request, res: Response) => {
 };  
 
 const getTravel = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     const user = req.body.user;
     try {
         const foundUser = await userService.findUser({ _id: user._id });

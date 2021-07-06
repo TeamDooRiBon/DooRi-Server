@@ -1,8 +1,17 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
 const image = require('../modules/image');
+const { validationResult } = require('express-validator');
 
 const getImages = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     try{
         return res.status(200).json({
             status: sc.OK,
