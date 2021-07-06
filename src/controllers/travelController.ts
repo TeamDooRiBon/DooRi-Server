@@ -201,20 +201,19 @@ const checkTravel = async (req: Request, res: Response) => {
             return res.status(404).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "Not Found"
+                message: "잘못된 참여코드입니다."
             })
         };
         const hostObject = await userService.findUserById(String(resultTravel[0].host));
         const travelData = {
-            groupId: resultTravel[0]._id,
-            travelName: resultTravel[0].travelName,
-            host: hostObject.name,
-            destination: resultTravel[0].destination,
-            startDate: resultTravel[0].startDate,
-            endDate: resultTravel[0].endDate,
-            image: resultTravel[0].image
+            "groupId": resultTravel[0]._id,
+            "travelName": resultTravel[0].travelName,
+            "host": hostObject.name,
+            "destination": resultTravel[0].destination,
+            "startDate": resultTravel[0].startDate,
+            "endDate": resultTravel[0].endDate,
+            "image": resultTravel[0].image
         };
-
         return res.status(200).json({
             status: sc.OK,
             success: true,
