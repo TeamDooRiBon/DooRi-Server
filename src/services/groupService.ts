@@ -34,8 +34,8 @@ const findGroup = async (code: String) => {
 
 const findGroupById = async (code: String) => {
     try {
-        const gruop = await Group.find({_id : code});
-        return group;
+        const gruop = await Group.findById(code);
+        return gruop;
     } catch (error) {
         console.log(error);
         throw error;
