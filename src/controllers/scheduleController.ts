@@ -15,7 +15,7 @@ const makeSchedule = async (req: Request, res: Response) => {
     }
     try {
         const { title, startTime, endTime, location, memo } = req.body;
-        const writer = req.body.writer;
+        const writer = req.body.user.id;
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
         
