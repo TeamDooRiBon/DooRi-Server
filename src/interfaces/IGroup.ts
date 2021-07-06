@@ -14,7 +14,7 @@ export interface IGroup {
     image: String;
 } 
 
-export interface IGruopInputDTO {
+export interface IGroupInputDTO {
     host: mongoose.Types.ObjectId;
     inviteCode: String;
     travelName: String;
