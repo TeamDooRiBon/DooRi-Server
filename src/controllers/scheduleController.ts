@@ -63,7 +63,7 @@ const getDailySchedule = async (req: Request, res: Response) => {
             }
             }
         );
-        // Year int 값의 크기순으로 정렬
+        // StartTime의 크기순으로 정렬
         const schedules = scheduleArray.sort(function (a, b) {
             return a.startTime - b.startTime;
         });
