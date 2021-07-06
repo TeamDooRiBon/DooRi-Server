@@ -12,8 +12,8 @@ export interface IBoardPostList {
 }
 
 export interface IBoard {
-    post: [IBoardPostList];
-    interest: [IBoardInterestList];
+    post: IBoardPostList[];
+    interest: IBoardInterestList[];
 }
 
 export interface IBoardInputDTO {

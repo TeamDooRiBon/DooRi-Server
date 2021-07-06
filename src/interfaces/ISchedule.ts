@@ -12,7 +12,7 @@ export interface ISchedule {
 }
 
 export interface ISchedules {
-    schedules : [ISchedule]
+    schedules : ISchedule[]
 }
 
 export interface IScheduleInputDTO {

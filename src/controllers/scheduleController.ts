@@ -159,7 +159,6 @@ const getOneSchedule = async (req: Request, res: Response) => {
 };  
 
 
-
 export default {
     makeSchedule,
     getDailySchedule,
