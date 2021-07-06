@@ -1,9 +1,9 @@
 import { IUserInputDTO, userSearchInput } from "../interfaces/IUser";
 import User from "../models/User";
 
-const findUser = async (data: userSearchInput) => {
+const findUserById = async (userId: String) => {
     try {
-        const user = await User.findOne({ _id: data });
+        const user = await User.findById(userId);
         return user;
     } catch (error) {
         console.log(error);
@@ -38,7 +38,7 @@ const createUser = async (data: IUserInputDTO) => {
 };
 
 export default {
-    findUser,
+    findUserById,
     findUserByEmail,
     createUser
 }

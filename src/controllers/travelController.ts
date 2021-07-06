@@ -55,7 +55,7 @@ const getTravel = async (req: Request, res: Response) => {
     }
     const user = req.body.user;
     try {
-        const foundUser = await userService.findUser({ _id: user._id });
+        const foundUser = await userService.findUserById(user._id);
         if (!foundUser) {
             return res.status(404).json({
                 status: sc.NOT_FOUND,
@@ -135,7 +135,41 @@ const getTravel = async (req: Request, res: Response) => {
     }
 }
 
+const pushMemberToTravel = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({
+            status: sc.BAD_REQUEST,
+            success: false,
+            message: "필요한 값이 없습니다."
+        });
+    }
+    const userId = req.body.user;
+    const groupId = req.params.groupId;
+    try {
+        const group = await groupService.findGroupById(groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "Not found",
+            });
+        }
+        group.members.unshift(userId);
+        await group.save();
+
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+        });
+    }
+}
+
 export default {
     makeTravel,
-    getTravel
+    getTravel,
+    pushMemberToTravel
 }
