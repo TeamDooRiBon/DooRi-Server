@@ -117,9 +117,13 @@ const getTravel = async (req: Request, res: Response) => {
             message: "여행 조회 성공",
             data: data
         })
-    } catch (err) {
-        console.log(err);
-        res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+       });
     }
 }
 
