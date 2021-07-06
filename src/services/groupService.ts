@@ -21,8 +21,7 @@ const createGroup = async (data : IGruopInputDTO) => {
     } 
 };
 
-// 이거 findGroupByInviteCode 로 바꾸면 좋을 것 같긴 합니다 (to 정디 ^__^)
-const findGroup = async (code: String) => {
+const findGroupByInviteCode = async (code: String) => {
     try {
         const gruop = await Group.find({inviteCode : code});
         return group;
@@ -44,6 +43,6 @@ const findGroupById = async (code: String) => {
 
 export default {
     createGroup,
-    findGroup,
+    findGroupByInviteCode,
     findGroupById
 } 
