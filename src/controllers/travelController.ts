@@ -32,6 +32,9 @@ const makeTravel = async (req: Request, res: Response) => {
         });  // 새로운 여행 그룹 생성
         newGroup.members.unshift(user.id);  //host 여행 멤버 추가
         newGroup.save();
+        const hostUser = await userService.findUserById(user.id);
+        hostUser.groups.unshift(newGroup._id);  // host user groups 배열에 여행 추가
+        hostUser.save();
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
@@ -77,13 +80,14 @@ const getTravel = async (req: Request, res: Response) => {
         travels.nowTravels.map((t) => {
             let memberNames = [];
             t.members.map((name) => {
-                memberNames.push(name);
+                memberNames.push(name["name"]);
             });
             let nowTravelData = {
                 _id: t._id,
                 startDate: t.startDate,
                 endDate: t.endDate,
                 travelName: t.travelName,
+                image: t.image,
                 destination: t.destination,
                 members: memberNames
             };
@@ -92,13 +96,14 @@ const getTravel = async (req: Request, res: Response) => {
         travels.comeTravels.map((t) => {
             let memberNames = [];
             t.members.map((name) => {
-                memberNames.push(name);
+                memberNames.push(name["name"]);
             });
             let comeTravelData = {
                 _id: t._id,
                 startDate: t.startDate,
                 endDate: t.endDate,
                 travelName: t.travelName,
+                image: t.image,
                 destination: t.destination,
                 members: memberNames
             };
@@ -107,13 +112,14 @@ const getTravel = async (req: Request, res: Response) => {
         travels.endTravels.map((t) => {
             let memberNames = [];
             t.members.map((name) => {
-                memberNames.push(name);
+                memberNames.push(name["name"]);
             });
             let endTravelData = {
                 _id: t._id,
                 startDate: t.startDate,
                 endDate: t.endDate,
                 travelName: t.travelName,
+                image: t.image,
                 destination: t.destination,
                 members: memberNames
             };

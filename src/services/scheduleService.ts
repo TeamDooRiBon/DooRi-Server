@@ -8,7 +8,13 @@ const createSchedule = async (data : IScheduleInputDTO) => {
 
     try { 
         const schedules = new Schedule({
-            schedules : [{ title, startTime, endTime, location, memo, writer }]
+            schedules : [{ 
+                title, 
+                startTime, 
+                endTime, 
+                location, 
+                memo, 
+                writer }]
         });
         await Group.findByIdAndUpdate(groupId , { $set : { schedules : schedules._id }});
         await schedules.save();
@@ -25,7 +31,14 @@ const addSchedule = async (data : IScheduleInputDTO) => {
 
     try { 
         const group = await Group.findById(groupId);
-        await Schedule.findByIdAndUpdate(group.schedules, { $push : { schedules : { title, startTime, endTime, location, memo, writer }}});
+        await Schedule.findByIdAndUpdate(group.schedules, { $push : { schedules : { 
+            title, 
+            startTime, 
+            endTime, 
+            location, 
+            memo, 
+            writer 
+        }}});
     
         return;
     } catch (error) {
@@ -43,7 +56,6 @@ const findSchedulesById = async (id: String) => {
         throw error;
     }
 }
-
 
 export default {
     createSchedule,
