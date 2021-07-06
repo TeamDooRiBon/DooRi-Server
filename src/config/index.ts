@@ -19,15 +19,18 @@ export default {
   /**
    * That long string from mlab
    */
-  mongoURI: process.env.MONGODB_URI,
+  mongoURI: "mongodb+srv://dooribon-user:dooriserbonver123@cluster0.fiuk0.mongodb.net/dooribon",
 
   /**
    * Your secret sauce
   **/
   jwtSecret: process.env.JWT_SECRET,
   jwtAlgorithm: process.env.JWT_ALGO,
- 
+  
+  /** 
+   * 카카오 로그인 클라 필요
   CLIENT_ID: process.env.CLIENT_ID,
   CLIENT_SECRET: process.env.CLIENT_SECRET,
   REDIRECT_URI: process.env.REDIRECT_URI
+  */
 };
