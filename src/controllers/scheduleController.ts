@@ -72,7 +72,11 @@ const getDailySchedule = async (req: Request, res: Response) => {
 
     } catch (error) {
         console.log(error);
-        res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+        });
     }
 };  
 
