@@ -12,15 +12,15 @@ export interface ISchedule {
 }
 
 export interface ISchedules {
-    schedules : [ISchedule]
+    schedules : ISchedule[]
 }
 
-export interface IScheduleInputDTO {
-    groupId: mongoose.Types.ObjectId;
-    title : string;
-    startTime : Date;
-    endTime : Date;
+export interface ISchedulesInputDTO {
+    groupId? : mongoose.Types.ObjectId;
+    title? : string;
+    startTime? : Date;
+    endTime? : Date;
     location? : string;
     memo? : string;
-    writer : mongoose.Types.ObjectId;
+    writer? : mongoose.Types.ObjectId;
 }

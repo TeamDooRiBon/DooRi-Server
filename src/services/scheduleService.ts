@@ -1,14 +1,20 @@
 import Schedule from "../models/Schedule";
 import Group from "../models/Group";
-import { IScheduleInputDTO } from "../interfaces/ISchedule";
+import { IScheduleInputDTO, ISchedulesInputDTO} from "../interfaces/ISchedule";
 
 
-const createSchedule = async (data : IScheduleInputDTO) => {
+const createSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer } = data;
 
     try { 
         const schedules = new Schedule({
-            schedules : [{ title, startTime, endTime, location, memo, writer }]
+            schedules : [{ 
+                title, 
+                startTime, 
+                endTime, 
+                location, 
+                memo, 
+                writer }]
         });
         await Group.findByIdAndUpdate(groupId , { $set : { schedules : schedules._id }});
         await schedules.save();
@@ -20,12 +26,19 @@ const createSchedule = async (data : IScheduleInputDTO) => {
 }
 
 
-const addSchedule = async (data : IScheduleInputDTO) => {
+const addSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer } = data;
 
     try { 
         const group = await Group.findById(groupId);
-        await Schedule.findByIdAndUpdate(group.schedules, { $push : { schedules : { title, startTime, endTime, location, memo, writer }}});
+        await Schedule.findByIdAndUpdate(group.schedules, { $push : { schedules : { 
+            title, 
+            startTime, 
+            endTime, 
+            location, 
+            memo, 
+            writer 
+        }}});
     
         return;
     } catch (error) {
@@ -44,9 +57,10 @@ const findSchedulesById = async (id: String) => {
     }
 }
 
-
 export default {
     createSchedule,
     addSchedule,
     findSchedulesById
 }
+
+// mongoose.LeanDocument<ISchedule>[]

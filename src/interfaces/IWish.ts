@@ -8,9 +8,9 @@ export interface IWishList {
     writer: mongoose.Types.ObjectId;
     tag: string;
     content: string;
-    likes: [ILike];
+    likes: ILike[];
 }
 
 export interface IWish {
-    post: [IWishList];
+    post: IWishList[];
 }
