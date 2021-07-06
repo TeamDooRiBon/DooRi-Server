@@ -26,10 +26,12 @@ const makeTravel = async (req: Request, res: Response) => {
         }
         const groupImage = image[imageIndex];  //해당 인덱스의 이미지 주소 로드
         const newGroup = await groupService.createGroup({ 
-            host: user._id, inviteCode, travelName, 
+            host: user.id, inviteCode, travelName, 
             destination, startDate, endDate, 
             image: groupImage
         });  // 새로운 여행 그룹 생성
+        newGroup.members.unshift(user.id);  //host 여행 멤버 추가
+        newGroup.save();
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
@@ -47,7 +49,7 @@ const makeTravel = async (req: Request, res: Response) => {
 const getTravel = async (req: Request, res: Response) => {
     const user = req.body.user;
     try {
-        const foundUser = await userService.findUserById(user._id);
+        const foundUser = await userService.findUserById(user.id);
         if (!foundUser) {
             return res.status(404).json({
                 status: sc.NOT_FOUND,
@@ -55,8 +57,7 @@ const getTravel = async (req: Request, res: Response) => {
                 message: "유효하지 않은 사용자"
             })
         };
-        const travels = await mainService.findTravelByDate({ _id: user._id });
-        //let travelArray: Object[] = [travels.nowTravels, travels.comeTravels, travels.endTravels];
+        const travels = await mainService.findTravelByDate({ _id: user.id });
         const whenTravel = ["nowTravels", "comeTravels", "endTravels"];
 
         let allTravels = new Map();
@@ -64,53 +65,51 @@ const getTravel = async (req: Request, res: Response) => {
             allTravels.set(whenTravel[i], []);
         }
 
-        for (let i = 0; i < travels.nowTravels.length; i++) {
-            let memberNames = []
-            for (let k = 0; k < travels.nowTravels[i].members.length; k++) {
-                memberNames.push(travels.nowTravels[i].members[k]);
-            }
+        travels.nowTravels.map((t) => {
+            let memberNames = [];
+            t.members.map((name) => {
+                memberNames.push(name);
+            });
             let nowTravelData = {
-                _id: travels.nowTravels[i]._id,
-                startDate: travels.nowTravels[i].startDate,
-                endDate: travels.nowTravels[i].endDate,
-                travelName: travels.nowTravels[i].travelName,
-                destination: travels.nowTravels[i].destination,
+                _id: t._id,
+                startDate: t.startDate,
+                endDate: t.endDate,
+                travelName: t.travelName,
+                destination: t.destination,
                 members: memberNames
             };
             allTravels.get("nowTravels").push(nowTravelData);
-        }
-
-        for (let i = 0; i < travels.comeTravels.length; i++) {
-            let memberNames = []
-            for (let k = 0; k < travels.comeTravels[i].members.length; k++) {
-                memberNames.push(travels.comeTravels[i].members[k]);
-            }
+        });
+        travels.comeTravels.map((t) => {
+            let memberNames = [];
+            t.members.map((name) => {
+                memberNames.push(name);
+            });
             let comeTravelData = {
-                _id: travels.comeTravels[i]._id,
-                startDate: travels.comeTravels[i].startDate,
-                endDate: travels.comeTravels[i].endDate,
-                travelName: travels.comeTravels[i].travelName,
-                destination: travels.comeTravels[i].destination,
+                _id: t._id,
+                startDate: t.startDate,
+                endDate: t.endDate,
+                travelName: t.travelName,
+                destination: t.destination,
                 members: memberNames
             };
             allTravels.get("comeTravels").push(comeTravelData);
-        }
-
-        for (let i = 0; i < travels.endTravels.length; i++) {
-            let memberNames = []
-            for (let k = 0; k < travels.endTravels[i].members.length; k++) {
-                memberNames.push(travels.endTravels[i].members[k]);
-            }
+        });
+        travels.endTravels.map((t) => {
+            let memberNames = [];
+            t.members.map((name) => {
+                memberNames.push(name);
+            });
             let endTravelData = {
-                _id: travels.endTravels[i]._id,
-                startDate: travels.endTravels[i].startDate,
-                endDate: travels.endTravels[i].endDate,
-                travelName: travels.endTravels[i].travelName,
-                destination: travels.endTravels[i].destination,
+                _id: t._id,
+                startDate: t.startDate,
+                endDate: t.endDate,
+                travelName: t.travelName,
+                destination: t.destination,
                 members: memberNames
             };
             allTravels.get("endTravels").push(endTravelData);
-        }
+        });
 
         const data = Array.from(allTravels, ([when, group]) => ({ when, group }));
 
@@ -135,19 +134,27 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
             message: "필요한 값이 없습니다."
         });
     }
-    const userId = req.body.user;
+    const userId = req.body.user.id;
     const groupId = req.params.groupId;
     try {
         const group = await groupService.findGroupById(groupId);
-        if (!group) {
+        const user = await userService.findUserById(userId);
+        if (!group || !user) {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
                 message: "Not found",
-            });
+            }); // 잘못된 아이디
         }
-        group.members.unshift(userId);
+        group.members.unshift(userId);  // 여행 그룹에 멤버 추가
         await group.save();
+        user.groups.unshift(group._id);
+        await user.save();
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "여행 참여 성공"
+        })
 
     } catch (error) {
         console.log(error);
