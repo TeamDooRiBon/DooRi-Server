@@ -1,9 +1,9 @@
 import { Router } from 'express';
-import  travelController  from '../controllers/travelController';
+import scheduleController  from '../controllers/scheduleController'
 import auth from '../middleware/auth';
 
 const router = Router();
 
-router.post('/', auth, travelController.makeTravel);
+router.post('/', auth, scheduleController.makeSchedule);
 
 export default router;
