@@ -1,17 +1,33 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
 const { validationResult } = require('express-validator');
-import { groupService, scheduleService } from "../services";
+import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
 
 const makeSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     try {
         const { title, startTime, endTime, location, memo } = req.body;
         const writer = req.body.writer;
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
-        const data = { groupId : mongoose.Types.ObjectId(groupId), title, startTime, endTime, location, memo, writer };
+        
+        const data = { 
+            groupId : mongoose.Types.ObjectId(groupId),
+            title, 
+            startTime, 
+            endTime, 
+            location, 
+            memo, 
+            writer 
+        };
 
         if (group["schedules"] === null) {
             await scheduleService.createSchedule(data);
@@ -26,7 +42,10 @@ const makeSchedule = async (req: Request, res: Response) => {
         });
     } catch (error) {
         console.log(error);
-        res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" });
     }
 };  
 
@@ -39,6 +58,7 @@ const getDailySchedule = async (req: Request, res: Response) => {
             message: "필요한 값이 없습니다." 
         });
     }
+
     try {
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
@@ -51,7 +71,12 @@ const getDailySchedule = async (req: Request, res: Response) => {
         scheduleTable.schedules.map((v) => {
             const difference = Math.floor((v.startTime.getTime() - date.getTime())/86400000);
             if (!difference) {
-                const scheduleObject = { "_id" : v._id, "startTime" : v.startTime, "title" : v.title, "memo" : v.memo };
+                const scheduleObject = { 
+                    "_id" : v._id, 
+                    "startTime" : v.startTime, 
+                    "title" : v.title, 
+                    "memo" : v.memo 
+                };
                 scheduleArray.push(scheduleObject);
             }
             }
@@ -80,7 +105,63 @@ const getDailySchedule = async (req: Request, res: Response) => {
     }
 };  
 
+
+const getOneSchedule = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
+
+    try {
+        const group = await groupService.findGroupById(req.params.groupId);
+        const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
+        const schedule = scheduleTable.schedules.filter(function (schedule) {
+            return String(schedule._id) === req.params.scheduleId 
+        })[0];
+        const user = await userService.findUserById(String(schedule.writer));
+
+        const writer = {
+            "name" : user.name,
+            "profileImage" : user.profileImage
+        };
+        const data = {
+            "_id" : schedule._id,
+            "writer" : writer,
+            "createdAt" : schedule.createdAt,
+            "tilte" : schedule.title,
+            "startTime" : schedule.startTime,
+            "endTime" : schedule.endTime,
+            "location" : schedule.location,
+            "memo" : schedule.memo 
+        }
+        
+
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "일정 조회 성공",
+            data
+        });
+
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+        });
+
+    }
+};  
+
+
+
 export default {
     makeSchedule,
-    getDailySchedule
+    getDailySchedule,
+    getOneSchedule
 } 
