@@ -183,7 +183,6 @@ const editSchedule = async (req: Request, res: Response) => {
             }
         });
 
-
         await Schedule.findByIdAndUpdate(group.schedules, {schedules : scheduleTable.schedules});
 
         return res.status(sc.OK).json({

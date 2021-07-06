@@ -1,9 +1,9 @@
 import Schedule from "../models/Schedule";
 import Group from "../models/Group";
-import { IScheduleInputDTO } from "../interfaces/ISchedule";
+import { IScheduleInputDTO, ISchedulesInputDTO} from "../interfaces/ISchedule";
 
 
-const createSchedule = async (data : IScheduleInputDTO) => {
+const createSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer } = data;
 
     try { 
@@ -26,7 +26,7 @@ const createSchedule = async (data : IScheduleInputDTO) => {
 }
 
 
-const addSchedule = async (data : IScheduleInputDTO) => {
+const addSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer } = data;
 
     try { 
@@ -62,3 +62,5 @@ export default {
     addSchedule,
     findSchedulesById
 }
+
+// mongoose.LeanDocument<ISchedule>[]

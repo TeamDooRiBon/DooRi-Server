@@ -15,7 +15,7 @@ export interface ISchedules {
     schedules : ISchedule[]
 }
 
-export interface IScheduleInputDTO {
+export interface ISchedulesInputDTO {
     groupId? : mongoose.Types.ObjectId;
     title? : string;
     startTime? : Date;
