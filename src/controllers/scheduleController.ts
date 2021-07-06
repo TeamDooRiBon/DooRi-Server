@@ -58,13 +58,7 @@ const getDailySchedule = async (req: Request, res: Response) => {
             message: "필요한 값이 없습니다." 
         });
     }
-    if(!error.isEmpty()) {
-        return res.status(sc.BAD_REQUEST).json({ 
-            status: sc.BAD_REQUEST, 
-            success: false, 
-            message: "필요한 값이 없습니다." 
-        });
-    }
+
     try {
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
@@ -121,17 +115,13 @@ const getOneSchedule = async (req: Request, res: Response) => {
             message: "필요한 값이 없습니다." 
         });
     }
-    if(!error.isEmpty()) {
-        return res.status(sc.BAD_REQUEST).json({ 
-            status: sc.BAD_REQUEST, 
-            success: false, 
-            message: "필요한 값이 없습니다." 
-        });
-    }
+
     try {
         const group = await groupService.findGroupById(req.params.groupId);
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
-        const schedule = scheduleTable.schedules.filter(function (schedule) {return String(schedule._id) === req.params.scheduleId })[0];
+        const schedule = scheduleTable.schedules.filter(function (schedule) {
+            return String(schedule._id) === req.params.scheduleId 
+        })[0];
 
         const user = await userService.findUserById(String(schedule.writer));
 
