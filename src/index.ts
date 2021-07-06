@@ -28,7 +28,7 @@ app
     ################################################
   `);
   })
-  .on("error", (err) => {
-    console.error(err);
+  .on("error", (error) => {
+    console.error(error);
     process.exit(1);
   });

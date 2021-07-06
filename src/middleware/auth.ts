@@ -16,7 +16,7 @@ export default (req, res, next) => {
 
         req.body.user = decoded.user;
         next();
-    } catch (err) {
+    } catch (error) {
         res.status(401).json({ msg: "Token is not valid" });
     }
 };
