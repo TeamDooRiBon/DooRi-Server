@@ -6,6 +6,13 @@ import mongoose from "mongoose";
 
 const makeSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     try {
         const { title, startTime, endTime, location, memo } = req.body;
         const writer = req.body.writer;
@@ -44,6 +51,13 @@ const makeSchedule = async (req: Request, res: Response) => {
 
 const getDailySchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     if(!error.isEmpty()) {
         return res.status(sc.BAD_REQUEST).json({ 
             status: sc.BAD_REQUEST, 
@@ -100,6 +114,13 @@ const getDailySchedule = async (req: Request, res: Response) => {
 
 const getOneSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     if(!error.isEmpty()) {
         return res.status(sc.BAD_REQUEST).json({ 
             status: sc.BAD_REQUEST, 
