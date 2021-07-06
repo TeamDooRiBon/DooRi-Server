@@ -6,5 +6,6 @@ const router = Router();
 
 router.post('/', auth, travelController.makeTravel);
 router.get('/', auth, travelController.getTravel);
+router.post('/:groupId', auth, travelController.pushMemberToTravel);
 
 export default router;

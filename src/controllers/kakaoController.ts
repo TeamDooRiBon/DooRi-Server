@@ -46,7 +46,6 @@ const getKakaoUser = async (req: Request, res: Response) => {
                 Authorization: `Bearer ${access_token}`
             }
         });  // user 정보 받아오기
-
         const checkUser = await userService.findUserByEmail({ email: user.data.kakao_account.email });
         const data = {
             name: user.data.properties.nickname,
