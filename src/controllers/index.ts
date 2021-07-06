@@ -1,9 +1,9 @@
-import travelController from "./travelController"
-import mainController from "./mainController"
-import scheduleController from "./scheduleController"
+import travelController from "./travelController";
+import scheduleController from "./scheduleController";
+import kakaoController from "./kakaoController";
 // controller index file
 export {
     travelController,
-    mainController,
-    scheduleController
+    scheduleController,
+    kakaoController
 }

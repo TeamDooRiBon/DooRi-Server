@@ -2,16 +2,6 @@ import { userSearchInput } from "../interfaces/IUser";
 import User from "../models/User";
 import Group from "../models/Group";
 
-const findUser = async (data: userSearchInput) => {
-    try {
-        const user = await User.findOne({_id: data});
-        return user;
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
-}
-
 const findTravelByDate = async (data: userSearchInput) => {
     try {
         const date = new Date();
@@ -30,6 +20,5 @@ const findTravelByDate = async (data: userSearchInput) => {
 }
 
 export default {
-    findUser,
     findTravelByDate
 };
