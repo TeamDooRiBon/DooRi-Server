@@ -14,8 +14,4 @@ const getToken = (userId) => {
     );
     return token;
 };
-
-
-
-
 module.exports = getToken;
