@@ -45,9 +45,17 @@ const makeTravel = async (req: Request, res: Response) => {
 };  
 
 const getTravel = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
     const user = req.body.user;
     try {
-        const foundUser = await userService.findUser({ _id: user._id });
+        const foundUser = await userService.findUserById(user._id);
         if (!foundUser) {
             return res.status(404).json({
                 status: sc.NOT_FOUND,
@@ -56,7 +64,6 @@ const getTravel = async (req: Request, res: Response) => {
             })
         };
         const travels = await mainService.findTravelByDate({ _id: user._id });
-        //let travelArray: Object[] = [travels.nowTravels, travels.comeTravels, travels.endTravels];
         const whenTravel = ["nowTravels", "comeTravels", "endTravels"];
 
         let allTravels = new Map();
@@ -64,53 +71,51 @@ const getTravel = async (req: Request, res: Response) => {
             allTravels.set(whenTravel[i], []);
         }
 
-        for (let i = 0; i < travels.nowTravels.length; i++) {
-            let memberNames = []
-            for (let k = 0; k < travels.nowTravels[i].members.length; k++) {
-                memberNames.push(travels.nowTravels[i].members[k]);
-            }
+        travels.nowTravels.map((t) => {
+            let memberNames = [];
+            t.members.map((name) => {
+                memberNames.push(name);
+            });
             let nowTravelData = {
-                _id: travels.nowTravels[i]._id,
-                startDate: travels.nowTravels[i].startDate,
-                endDate: travels.nowTravels[i].endDate,
-                travelName: travels.nowTravels[i].travelName,
-                destination: travels.nowTravels[i].destination,
+                _id: t._id,
+                startDate: t.startDate,
+                endDate: t.endDate,
+                travelName: t.travelName,
+                destination: t.destination,
                 members: memberNames
             };
             allTravels.get("nowTravels").push(nowTravelData);
-        }
-
-        for (let i = 0; i < travels.comeTravels.length; i++) {
-            let memberNames = []
-            for (let k = 0; k < travels.comeTravels[i].members.length; k++) {
-                memberNames.push(travels.comeTravels[i].members[k]);
-            }
+        });
+        travels.comeTravels.map((t) => {
+            let memberNames = [];
+            t.members.map((name) => {
+                memberNames.push(name);
+            });
             let comeTravelData = {
-                _id: travels.comeTravels[i]._id,
-                startDate: travels.comeTravels[i].startDate,
-                endDate: travels.comeTravels[i].endDate,
-                travelName: travels.comeTravels[i].travelName,
-                destination: travels.comeTravels[i].destination,
+                _id: t._id,
+                startDate: t.startDate,
+                endDate: t.endDate,
+                travelName: t.travelName,
+                destination: t.destination,
                 members: memberNames
             };
             allTravels.get("comeTravels").push(comeTravelData);
-        }
-
-        for (let i = 0; i < travels.endTravels.length; i++) {
-            let memberNames = []
-            for (let k = 0; k < travels.endTravels[i].members.length; k++) {
-                memberNames.push(travels.endTravels[i].members[k]);
-            }
+        });
+        travels.endTravels.map((t) => {
+            let memberNames = [];
+            t.members.map((name) => {
+                memberNames.push(name);
+            });
             let endTravelData = {
-                _id: travels.endTravels[i]._id,
-                startDate: travels.endTravels[i].startDate,
-                endDate: travels.endTravels[i].endDate,
-                travelName: travels.endTravels[i].travelName,
-                destination: travels.endTravels[i].destination,
+                _id: t._id,
+                startDate: t.startDate,
+                endDate: t.endDate,
+                travelName: t.travelName,
+                destination: t.destination,
                 members: memberNames
             };
             allTravels.get("endTravels").push(endTravelData);
-        }
+        });
 
         const data = Array.from(allTravels, ([when, group]) => ({ when, group }));
 
@@ -120,13 +125,51 @@ const getTravel = async (req: Request, res: Response) => {
             message: "여행 조회 성공",
             data: data
         })
-    } catch (err) {
-        console.log(err);
-        res.status(sc.INTERNAL_SERVER_ERROR).json({ status: sc.INTERNAL_SERVER_ERROR, success: false, message: "서버 내부 오류" });
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+       });
+    }
+}
+
+const pushMemberToTravel = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({
+            status: sc.BAD_REQUEST,
+            success: false,
+            message: "필요한 값이 없습니다."
+        });
+    }
+    const userId = req.body.user;
+    const groupId = req.params.groupId;
+    try {
+        const group = await groupService.findGroupById(groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "Not found",
+            });
+        }
+        group.members.unshift(userId);
+        await group.save();
+
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+        });
     }
 }
 
 export default {
     makeTravel,
-    getTravel
+    getTravel,
+    pushMemberToTravel
 }

@@ -17,7 +17,7 @@ const findTravelByDate = async (data: userSearchInput) => {
         console.log(error);
         throw error;
     }
-}
+};
 
 export default {
     findTravelByDate
