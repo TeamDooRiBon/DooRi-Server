@@ -1,7 +1,7 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
 const { validationResult } = require('express-validator');
-import { groupService, scheduleService } from "../services";
+import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
 
 const makeSchedule = async (req: Request, res: Response) => {
@@ -112,7 +112,7 @@ const getOneSchedule = async (req: Request, res: Response) => {
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
         const schedule = scheduleTable.schedules.filter(function (schedule) {return String(schedule._id) === req.params.scheduleId })[0];
 
-        const user = await User.findById(schedule.writer);
+        const user = await userService.findUserById(String(schedule.writer));
 
         const writer = {
             "name" : user.name,
@@ -122,7 +122,7 @@ const getOneSchedule = async (req: Request, res: Response) => {
             "_id" : schedule._id,
             "writer" : writer,
             "createdAt" : schedule.createdAt,
-            "tilte" : schedule.tilte,
+            "tilte" : schedule.title,
             "startTime" : schedule.startTime,
             "endTime" : schedule.endTime,
             "location" : schedule.location,
@@ -144,6 +144,7 @@ const getOneSchedule = async (req: Request, res: Response) => {
             success: false, 
             message: "서버 내부 오류" 
         });
+
     }
 };  
 
