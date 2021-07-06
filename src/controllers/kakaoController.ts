@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const axios = require('axios');
 const sc = require('../modules/statusCode');
 const getToken = require('../modules/jwtToken');
-//import config from "../config";
+import config from "../config";
 import userService from "../services/userService";
 const qs = require('qs');
 
@@ -26,7 +26,7 @@ const getKakaoUser = async (req: Request, res: Response) => {
     });
   
     const access_token = tokenData.data.access_token;
-    **/
+    */
     try {
         const tokenInfo = await axios({
             method: 'GET',

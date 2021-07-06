@@ -26,10 +26,12 @@ const makeTravel = async (req: Request, res: Response) => {
         }
         const groupImage = image[imageIndex];  //해당 인덱스의 이미지 주소 로드
         const newGroup = await groupService.createGroup({ 
-            host: user._id, inviteCode, travelName, 
+            host: user.id, inviteCode, travelName, 
             destination, startDate, endDate, 
             image: groupImage
         });  // 새로운 여행 그룹 생성
+        newGroup.members.unshift(user.id);  //host 여행 멤버 추가
+        newGroup.save();
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
@@ -55,7 +57,7 @@ const getTravel = async (req: Request, res: Response) => {
     }
     const user = req.body.user;
     try {
-        const foundUser = await userService.findUserById(user._id);
+        const foundUser = await userService.findUserById(user.id);
         if (!foundUser) {
             return res.status(404).json({
                 status: sc.NOT_FOUND,
@@ -63,7 +65,8 @@ const getTravel = async (req: Request, res: Response) => {
                 message: "유효하지 않은 사용자"
             })
         };
-        const travels = await mainService.findTravelByDate({ _id: user._id });
+
+        const travels = await mainService.findTravelByDate({ _id: user.id });
         const whenTravel = ["nowTravels", "comeTravels", "endTravels"];
 
         let allTravels = new Map();
@@ -144,19 +147,27 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
             message: "필요한 값이 없습니다."
         });
     }
-    const userId = req.body.user;
+    const userId = req.body.user.id;
     const groupId = req.params.groupId;
     try {
         const group = await groupService.findGroupById(groupId);
-        if (!group) {
+        const user = await userService.findUserById(userId);
+        if (!group || !user) {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
                 message: "Not found",
-            });
+            }); // 잘못된 아이디
         }
-        group.members.unshift(userId);
+        group.members.unshift(userId);  // 여행 그룹에 멤버 추가
         await group.save();
+        user.groups.unshift(group._id);
+        await user.save();
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "여행 참여 성공"
+        })
 
     } catch (error) {
         console.log(error);
