@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import config from "../config";
+const sc = require('../modules/statusCode');
 
 export default (req, res, next) => {
     // Get token from header
@@ -7,7 +8,11 @@ export default (req, res, next) => {
 
     // Check if not token
     if (!token) {
-        return res.status(401).json({ msg: "No token, authorization denied" });
+        return res.status(sc.UNAUTHORIZED).json({ 
+            status: sc.UNAUTHORIZED,
+            success: false,
+            message: "No token, authorization denied" 
+        });
     }
 
     // Verify token
@@ -17,6 +22,11 @@ export default (req, res, next) => {
         req.body.user = decoded.user;
         next();
     } catch (error) {
-        res.status(401).json({ msg: "Token is not valid" });
+        console.log(error);
+        res.status(sc.UNAUTHORIZED).json({ 
+            status: sc.UNAUTHORIZED,
+            success: false,
+            message: "Token is not valid" 
+        });
     }
 };
