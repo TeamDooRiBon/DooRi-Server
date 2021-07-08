@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
 import Schedule from "../models/Schedule";
+const setTimeFormat = require("./timeController");
 
 /**
  *  @route POST /schedule/:groupId
