@@ -1,8 +1,8 @@
 import Group from "../models/Group";
-import { IGruopInputDTO } from "../interfaces/IGroup";
+import { IGroupInputDTO } from "../interfaces/IGroup";
 import { group } from "console";
 
-const createGroup = async (data : IGruopInputDTO) => {
+const createGroup = async (data : IGroupInputDTO) => {
     const {
         host, inviteCode, travelName, destination,
         startDate, endDate, image
@@ -23,7 +23,7 @@ const createGroup = async (data : IGruopInputDTO) => {
 
 const findGroupByInviteCode = async (code: String) => {
     try {
-        const gruop = await Group.find({inviteCode : code});
+        const group = await Group.find({inviteCode : code}); //요기
         return group;
     } catch (error) {
         console.log(error);

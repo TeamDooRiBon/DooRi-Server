@@ -5,5 +5,6 @@ import auth from '../middleware/auth';
 const router = Router();
 
 router.get('/', imageController.getImages);
+router.get('/:groupId', auth, imageController.getTravelImage);
 
 export default router;
