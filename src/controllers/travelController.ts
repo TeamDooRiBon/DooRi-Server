@@ -245,9 +245,53 @@ const checkTravel = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ *  @route PATCH /travel/:groupId
+ *  @desc edit travel
+ *  @access Private
+ */
+const editTravel = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
+    try {
+        const { travelName, destination, startDate, endDate, imageIndex } = req.body;
+        const image = image[imageIndex];
+        const editData = { travelName, destination, startDate, endDate, imageURL };
+
+        const editedTravel = await groupService.editTravel(req.params.groupId, editData);
+        const data = {
+            "travelName": editedTravel.travelName,
+            "destination": editedTravel.destination,
+            "startDate": editedTravel.startDate,
+            "endDate": editedTravel.endDate,
+            "imageURL": editedTravel.image
+        }
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "여행 수정 성공",
+            data: data
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+        });
+    }
+}
+
 export default {
     makeTravel,
     getTravel,
     pushMemberToTravel,
-    checkTravel
+    checkTravel,
+    editTravel
 }
