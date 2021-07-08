@@ -1,9 +1,10 @@
 import Board from "../models/Board";
 import Group from "../models/Group";
 import { IBoardInputDTO } from "../interfaces/IBoard";
+import groupService from "./groupService";
 
 
-const createBoard = async (data : IBoardInputDTO) => {
+const createBoard = async (data: IBoardInputDTO) => {
     const {
         groupId, writer, tag, content
     } = data;
@@ -43,8 +44,18 @@ const addBoard = async (data : IBoardInputDTO) => {
     } 
 };
 
+const findBoard = async (boardsId: String, tagData: String) => {
+    try {
+        const boardList = await Board.findOne({_id: boardsId});
+        return boardList;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    } 
+};
 
 export default {
     createBoard,
-    addBoard
+    addBoard,
+    findBoard
 } 
