@@ -1,6 +1,7 @@
 import Group from "../models/Group";
 import { IGroupEditDTO, IGroupInputDTO } from "../interfaces/IGroup";
 import { group } from "console";
+const images = require('../modules/image');
 
 const createGroup = async (data: IGroupInputDTO) => {
     const {
@@ -48,7 +49,7 @@ const editTravel = async (groupId: String, data: IGroupEditDTO) => {
             destination: data.destination,
             startDate: data.startDate,
             endDate: data.endDate,
-            image: data.image
+            image: images[Number(data.image)]
         },
         { new: true });
         return editedTravel;

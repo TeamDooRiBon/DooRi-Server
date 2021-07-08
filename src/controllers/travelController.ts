@@ -313,10 +313,8 @@ const editTravel = async (req: Request, res: Response) => {
         });
     }
     try {
-        const { travelName, destination, startDate, endDate, imageIndex } = req.body;
-        const imageURL = image[imageIndex];
-        const editData = { travelName, destination, startDate, endDate, imageURL };
-
+        const { travelName, destination, startDate, endDate, image } = req.body;
+        const editData = { travelName, destination, startDate, endDate, image };
         const editedTravel = await groupService.editTravel(req.params.groupId, editData);
         const data = {
             "travelName": editedTravel.travelName,
