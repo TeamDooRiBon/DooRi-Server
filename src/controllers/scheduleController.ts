@@ -196,7 +196,7 @@ const editSchedule = async (req: Request, res: Response) => {
             status: sc.OK,
             success: true,
             message: "일정 수정 성공",
-            date: schedules
+            data: schedules
         });
     } catch (error) {
         console.log(error);
