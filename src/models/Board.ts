@@ -16,20 +16,9 @@ const BoardPostSchema = new mongoose.Schema({
     }
 });
 
-const BoardInterstSchema = new mongoose.Schema({
-    member: {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "User",
-    },
-    choice: [{
-        type: String,
-        required: true
-    }]
-});
 
 const BoardSchema = new mongoose.Schema({
-    post: [BoardPostSchema],
-    interest: [BoardInterstSchema]
+    post: [BoardPostSchema]
 });
 
 export default mongoose.model<IBoard & mongoose.Document>("Board", BoardSchema);
