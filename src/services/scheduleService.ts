@@ -68,6 +68,7 @@ const findSchedulesByDate = async (date: Date, id: String) => {
             const difference = Math.floor((v.startTime.getTime() - date.getTime()) / 86400000);
             if (!difference) {
         
+                // timeController의 내용.. Service에서 Controller를 호출해도 될까?
                 const time = v.startTime;
                 const year = time.getFullYear();
                 const month = time.getMonth()+1;
