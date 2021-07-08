@@ -5,6 +5,7 @@ const tagMatch = require('../modules/tag');
 import { boardService, groupService, userService } from "../services";
 import mongoose from "mongoose";
 import Schedule from "../models/Schedule";
+import { group } from "console";
 
 /**
  *  @route POST /board/:groupId/:tag
@@ -71,17 +72,20 @@ const getBoard = async (req: Request, res: Response) => {
     }
     try {
         const tag = tagMatch[req.params.tag];
-        const boardList = await boardService.findBoard(req.params.groupId, tag);
+        const group = await groupService.findGroupById(req.params.groupId);
         let data = []
-        boardList.map((b) => {
-            if (b.tag == tag) {
-                let pushData = {
-                    "writer": b.writer, // 클라에서 user이름 찾는 걸로 다시 요청해주셔야할 것 같습니다. await가 안먹네요,, 어떻게 하면 이름이 나올까요
-                    "content": b.content 
+        if (group.boards !== null) {
+            const boardList = await boardService.findBoard(String(group.boards), tag);
+            boardList.post.map((b) => {
+                if (b.tag == tag) {
+                    let pushData = {
+                        "writer": b.writer, // 클라에서 user이름 찾는 걸로 다시 요청해주셔야할 것 같습니다. await가 안먹네요,, 어떻게 하면 이름이 나올까요
+                        "content": b.content
+                    }
+                    data.unshift(pushData);
                 }
-                data.unshift(pushData);
-            }
-        });
+            });
+        }
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,

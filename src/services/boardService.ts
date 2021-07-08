@@ -44,11 +44,10 @@ const addBoard = async (data : IBoardInputDTO) => {
     } 
 };
 
-const findBoard = async (groupId: String, tagData: String) => {
+const findBoard = async (boardsId: String, tagData: String) => {
     try {
-        const group = await groupService.findGroupById(groupId);
-        const boardList = await Board.findOne(group.boards);
-        return boardList.post;
+        const boardList = await Board.findOne({_id: boardsId});
+        return boardList;
     } catch (error) {
         console.log(error);
         throw error;
