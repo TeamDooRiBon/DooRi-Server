@@ -4,6 +4,11 @@ const image = require('../modules/image');
 const { validationResult } = require('express-validator');
 import { groupService } from "../services";
 
+/**
+ *  @route GET /image
+ *  @desc GET allImages
+ *  @access Private
+ */
 const getImages = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
