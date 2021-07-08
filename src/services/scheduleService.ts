@@ -1,6 +1,6 @@
 import Schedule from "../models/Schedule";
 import Group from "../models/Group";
-import { ISchedulesInputDTO} from "../interfaces/ISchedule";
+import { ISchedulesInputDTO } from "../interfaces/ISchedule";
 
 
 const createSchedule = async (data : ISchedulesInputDTO) => {
@@ -63,13 +63,22 @@ const findSchedulesByDate = async (date: Date, id: String) => {
         const scheduleTable = await Schedule.findById(group.schedules);
 
         const scheduleArray = [];
-
+        
         scheduleTable.schedules.map((v) => {
             const difference = Math.floor((v.startTime.getTime() - date.getTime()) / 86400000);
             if (!difference) {
+        
+                const time = v.startTime;
+                const year = time.getFullYear();
+                const month = time.getMonth()+1;
+                const date = time.getDate();
+                const hour = time.getUTCHours();
+                const minute = time.getUTCMinutes();
+                const startTime = year + "-" + month + "-" + date + "-" + hour + ":" + minute;
+        
                 const scheduleObject = {
                     "_id": v._id,
-                    "startTime": v.startTime,
+                    "startTime": startTime,
                     "title": v.title,
                     "memo": v.memo
                 };
@@ -95,5 +104,3 @@ export default {
     findSchedulesById,
     findSchedulesByDate
 }
-
-// mongoose.LeanDocument<ISchedule>[]
