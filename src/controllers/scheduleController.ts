@@ -5,6 +5,11 @@ import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
 import Schedule from "../models/Schedule";
 
+/**
+ *  @route POST /schedule/:groupId
+ *  @desc Post schedule
+ *  @access Private
+ */
 const makeSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
@@ -55,6 +60,11 @@ const makeSchedule = async (req: Request, res: Response) => {
     }
 };  
 
+/**
+ *  @route GET /schedule/daily/:groupId/:date
+ *  @desc Get daily schedule
+ *  @access Private
+ */
 const getDailySchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
@@ -92,7 +102,11 @@ const getDailySchedule = async (req: Request, res: Response) => {
     }
 };  
 
-
+/**
+ *  @route GET /schedule/:groupId/:scheduleId
+ *  @desc Get specific schedule
+ *  @access Private
+ */
 const getOneSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
@@ -145,7 +159,11 @@ const getOneSchedule = async (req: Request, res: Response) => {
     }
 };  
 
-// 일정 수정
+/**
+ *  @route PATCH /schedule/:groupId/:scheduleId
+ *  @desc Edit schedule
+ *  @access Private
+ */
 const editSchedule = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {

@@ -20,6 +20,9 @@
 ### 📋 IA  
 ![DooribonIA](https://user-images.githubusercontent.com/20807197/124385082-3b0eb680-dd0f-11eb-9462-ee8f02ff981b.png)   
 
+### 💡 API 명세서 (초안)  
+[API 명세서 노션](https://www.notion.so/fc2b508e4a3c402d8556b32f47bbfdea?v=9dace5ed089b4460b328147a0563af0e)
+
 ### 🛠 Development Environment
 
 <img src="https://img.shields.io/badge/Node.js-v14-green"/> <img src="https://img.shields.io/badge/Mongoose-v5.12.10-blue"/> <img src="https://img.shields.io/badge/Express-v4.17.1-green"/> <img src="https://img.shields.io/badge/Typescript-v4.2.4-blue"/>  
