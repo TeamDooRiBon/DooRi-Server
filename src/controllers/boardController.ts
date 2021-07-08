@@ -6,6 +6,11 @@ import { boardService, groupService } from "../services";
 import mongoose from "mongoose";
 import Schedule from "../models/Schedule";
 
+/**
+ *  @route POST /board/:groupId/:tag
+ *  @desc Post board
+ *  @access Private
+ */
 const makeBoard = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if(!error.isEmpty()) {
