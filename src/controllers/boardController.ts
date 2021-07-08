@@ -21,9 +21,6 @@ const makeBoard = async (req: Request, res: Response) => {
         });
     }
     try {
-        
-
-
         const { content } = req.body;
         const writer = req.body.user.id;
         const tag = tagMatch[req.params.tag];
