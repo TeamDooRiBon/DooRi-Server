@@ -1,3 +1,4 @@
+import { group } from "console";
 import express, { Request, Response } from "express";
 import { ResultWithContext } from "express-validator/src/chain";
 const sc = require('../modules/statusCode');
@@ -73,7 +74,7 @@ const getTravel = async (req: Request, res: Response) => {
     try {
         const foundUser = await userService.findUserById(user.id);
         if (!foundUser) {
-            return res.status(404).json({
+            return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
                 message: "유효하지 않은 사용자"
@@ -154,6 +155,58 @@ const getTravel = async (req: Request, res: Response) => {
         });
     }
 }
+
+/**
+ *  @route GET /travel/:groupId
+ *  @desc GET specific group information
+ *  @access Private
+ */
+const getTravelInformation = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({
+            status: sc.BAD_REQUEST,
+            success: false,
+            message: "필요한 값이 없습니다."
+        });
+    }
+    try {
+        const group = await groupService.findGroupById(req.params.groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "404 Not found"
+            })   
+        }
+        let membersArray = [];
+        group.members.map((member) => {
+            membersArray.push({ 
+                name: member['name'],
+                profileImage: member['profileImage']
+            });
+        });
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "여행 정보 조회 성공",
+            data: {
+                travelName: group.travelName,
+                startDate: group.startDate,
+                endDate: group.endDate,
+                destination: group.destination,
+                members: membersArray
+            }
+        })
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({
+            status: sc.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: "서버 내부 오류"
+        });
+    }
+};
 
 const pushMemberToTravel = async (req: Request, res: Response) => {
     const error = validationResult(req);
@@ -261,7 +314,7 @@ const editTravel = async (req: Request, res: Response) => {
     }
     try {
         const { travelName, destination, startDate, endDate, imageIndex } = req.body;
-        const image = image[imageIndex];
+        const imageURL = image[imageIndex];
         const editData = { travelName, destination, startDate, endDate, imageURL };
 
         const editedTravel = await groupService.editTravel(req.params.groupId, editData);
@@ -291,6 +344,7 @@ const editTravel = async (req: Request, res: Response) => {
 export default {
     makeTravel,
     getTravel,
+    getTravelInformation,
     pushMemberToTravel,
     checkTravel,
     editTravel
