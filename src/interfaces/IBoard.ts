@@ -11,5 +11,8 @@ export interface IBoard {
 }
 
 export interface IBoardInputDTO {
-    post: IBoardPostList[];
+    groupId? : mongoose.Types.ObjectId;
+    writer? : mongoose.Types.ObjectId;
+    tag? : string;
+    content? : string;
 }
