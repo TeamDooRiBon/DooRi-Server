@@ -4,6 +4,7 @@ const { validationResult } = require('express-validator');
 import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
 import Schedule from "../models/Schedule";
+const setTimeFormat = require('./timeController');
 
 /**
  *  @route POST /schedule/:groupId
@@ -132,10 +133,10 @@ const getOneSchedule = async (req: Request, res: Response) => {
         const data = {
             "_id" : schedule._id,
             "writer" : writer,
-            "createdAt" : schedule.createdAt,
+            "createdAt" : setTimeFormat(schedule.createdAt),
             "tilte" : schedule.title,
-            "startTime" : schedule.startTime,
-            "endTime" : schedule.endTime,
+            "startTime" : setTimeFormat(schedule.startTime),
+            "endTime" : setTimeFormat(schedule.endTime),
             "location" : schedule.location,
             "memo" : schedule.memo 
         }
