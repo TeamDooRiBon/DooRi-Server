@@ -57,10 +57,43 @@ const findSchedulesById = async (id: String) => {
     }
 }
 
+const findSchedulesByDate = async (date: Date, id: String) => {
+    try {
+        const group = await Group.findById(id);
+        const scheduleTable = await Schedule.findById(group.schedules);
+
+        const scheduleArray = [];
+
+        scheduleTable.schedules.map((v) => {
+            const difference = Math.floor((v.startTime.getTime() - date.getTime()) / 86400000);
+            if (!difference) {
+                const scheduleObject = {
+                    "_id": v._id,
+                    "startTime": v.startTime,
+                    "title": v.title,
+                    "memo": v.memo
+                };
+                scheduleArray.push(scheduleObject);
+            }
+        }
+        );
+        // StartTime의 크기순으로 정렬
+        const schedules = scheduleArray.sort(function (a, b) {
+            return a.startTime - b.startTime;
+        });
+        return schedules;
+        
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+}
+
 export default {
     createSchedule,
     addSchedule,
-    findSchedulesById
+    findSchedulesById,
+    findSchedulesByDate
 }
 
 // mongoose.LeanDocument<ISchedule>[]
