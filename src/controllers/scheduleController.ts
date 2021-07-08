@@ -36,10 +36,15 @@ const makeSchedule = async (req: Request, res: Response) => {
         else {
             await scheduleService.addSchedule(data);
         }
+
+        const date = new Date(startTime);
+        const schedules = await scheduleService.findSchedulesByDate(date, groupId);
+
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "스케쥴 생성 성공"
+            message: "스케쥴 생성 성공",
+            data: schedules
         });
     } catch (error) {
         console.log(error);
@@ -63,29 +68,10 @@ const getDailySchedule = async (req: Request, res: Response) => {
     try {
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
-        const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
         const date = new Date(req.params.date);
         const day = Math.ceil((date.getTime() - group.startDate.getTime())/86400000)+1;
 
-        const scheduleArray = [];
-
-        scheduleTable.schedules.map((v) => {
-            const difference = Math.floor((v.startTime.getTime() - date.getTime())/86400000);
-            if (!difference) {
-                const scheduleObject = { 
-                    "_id" : v._id, 
-                    "startTime" : v.startTime, 
-                    "title" : v.title, 
-                    "memo" : v.memo 
-                };
-                scheduleArray.push(scheduleObject);
-            }
-            }
-        );
-        // StartTime의 크기순으로 정렬
-        const schedules = scheduleArray.sort(function (a, b) {
-            return a.startTime - b.startTime;
-        });
+        const schedules = await scheduleService.findSchedulesByDate(date, groupId);   // 해당 날짜 스케쥴 찾기
         
         const data = { day, date, schedules }; 
         
@@ -185,10 +171,14 @@ const editSchedule = async (req: Request, res: Response) => {
 
         await Schedule.findByIdAndUpdate(group.schedules, {schedules : scheduleTable.schedules});
 
+        const date = new Date(startTime);
+        const schedules = await scheduleService.findSchedulesByDate(date, groupId);
+
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "일정 수정 성공"
+            message: "일정 수정 성공",
+            date: schedules
         });
     } catch (error) {
         console.log(error);
@@ -199,12 +189,72 @@ const editSchedule = async (req: Request, res: Response) => {
         });
     }
 };  
+/**
+ *  @route DELETE schedule/:groupId/:scheduleId
+ *  @desc Delete schedule
+ *  @access Private
+ */
+const deleteSchedule = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if (!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({
+            status: sc.BAD_REQUEST,
+            success: false,
+            message: "필요한 값이 없습니다."
+        });
+    }
+    try {
+        const groupId = req.params.groupId;
+        const group = await groupService.findGroupById(groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "not found"
+            });
+        }
+        const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));  // 스케줄 테이블 찾기
+        const deleteSchedule = scheduleTable.schedules.find(
+            (schedule) => schedule._id.toString() === req.params.scheduleId
+        );  // 삭제할 스케줄 아이디 찾기
+        if (!deleteSchedule) {
+            return res.status(sc.NOT_FOUND).json({ 
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "not found"
+            });
+        }  // 해당 일정이 없을 때
+        const removeIndex = scheduleTable.schedules
+            .map((schedule) => schedule._id.toString())
+            .indexOf(req.params.scheduleId);
 
+        const date = scheduleTable.schedules[removeIndex].startTime;  // response-body를 위해 해당 날짜 미리 구해 놓는다.
+        scheduleTable.schedules.splice(removeIndex, 1);  // 스케줄 삭제
+        await scheduleTable.save();
+
+        const schedules  = await scheduleService.findSchedulesByDate(date, groupId);
+        
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "일정 삭제 완료",
+            data: schedules
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({
+            status: sc.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: "서버 내부 오류"
+        });
+    }
+};
 
 
 export default {
     makeSchedule,
     getDailySchedule,
     getOneSchedule,
-    editSchedule
+    editSchedule,
+    deleteSchedule
 } 

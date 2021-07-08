@@ -7,7 +7,7 @@ import { groupService } from "../services";
 /**
  *  @route GET /image
  *  @desc GET allImages
- *  @access Private
+ *  @access Public
  */
 const getImages = async (req: Request, res: Response) => {
     const error = validationResult(req);
@@ -35,6 +35,11 @@ const getImages = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ *  @route GET /image/:groupId
+ *  @desc GET group images
+ *  @access Private
+ */
 const getTravelImage = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
