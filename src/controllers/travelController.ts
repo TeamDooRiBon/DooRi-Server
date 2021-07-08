@@ -240,9 +240,9 @@ const checkTravel = async (req: Request, res: Response) => {
     }
 }
 
-    export default {
-        makeTravel,
-        getTravel,
-        pushMemberToTravel,
-        checkTravel
-    }
+export default {
+    makeTravel,
+    getTravel,
+    pushMemberToTravel,
+    checkTravel
+}
