@@ -6,6 +6,11 @@ const { validationResult } = require('express-validator');
 const generateCode = require('./inviteController');
 import { groupService, mainService, userService } from "../services";
 
+/**
+ *  @route POST /travel
+ *  @desc make travel group
+ *  @access Private
+ */
 const makeTravel = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {

@@ -6,6 +6,11 @@ import config from "../config";
 import userService from "../services/userService";
 const qs = require('qs');
 
+/**
+ *  @route POST /auth/user
+ *  @desc Authenticate user & get token(로그인)
+ *  @access Private
+ */
 const getKakaoUser = async (req: Request, res: Response) => {
     let access_token = req.body.access_token;
     const refresh_token = req.body.refresh_token;
