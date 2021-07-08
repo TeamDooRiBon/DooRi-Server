@@ -192,9 +192,9 @@ const getTravelInformation = async (req: Request, res: Response) => {
             message: "여행 정보 조회 성공",
             data: {
                 travelName: group.travelName,
-                startTime: group.startDate,
-                endTime: group.endDate,
-                location: group.destination,
+                startDate: group.startDate,
+                endDate: group.endDate,
+                destination: group.destination,
                 members: membersArray
             }
         })
