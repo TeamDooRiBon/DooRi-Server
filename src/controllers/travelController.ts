@@ -6,6 +6,11 @@ const { validationResult } = require('express-validator');
 const generateCode = require('./inviteController');
 import { groupService, mainService, userService } from "../services";
 
+/**
+ *  @route POST /travel
+ *  @desc make travel group
+ *  @access Private
+ */
 const makeTravel = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -50,6 +55,11 @@ const makeTravel = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ *  @route GET /travel
+ *  @desc GET allTravel
+ *  @access Private
+ */
 const getTravel = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -186,6 +196,11 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ *  @route GET /travel/:inviteCode
+ *  @desc GET checkTravelByInviteCode
+ *  @access Private
+ */
 const checkTravel = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -230,9 +245,9 @@ const checkTravel = async (req: Request, res: Response) => {
     }
 }
 
-    export default {
-        makeTravel,
-        getTravel,
-        pushMemberToTravel,
-        checkTravel
-    }
+export default {
+    makeTravel,
+    getTravel,
+    pushMemberToTravel,
+    checkTravel
+}
