@@ -1,6 +1,8 @@
 import Schedule from "../models/Schedule";
 import Group from "../models/Group";
+
 import { ISchedulesInputDTO } from "../interfaces/ISchedule";
+
 
 
 const createSchedule = async (data : ISchedulesInputDTO) => {
