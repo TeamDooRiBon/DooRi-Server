@@ -1,6 +1,5 @@
 import Group from "../models/Group";
 import { IGroupInputDTO } from "../interfaces/IGroup";
-import { group } from "console";
 
 const createGroup = async (data : IGroupInputDTO) => {
     const {
@@ -31,9 +30,9 @@ const findGroupByInviteCode = async (code: String) => {
     } 
 };
 
-const findGroupById = async (code: String) => {
+const findGroupById = async (groupId: String) => {
     try {
-        const group = await Group.findById(code);
+        const group = await Group.findById(groupId).populate("members", ['name', 'profileImage']);
         return group;
     } catch (error) {
         console.log(error);
