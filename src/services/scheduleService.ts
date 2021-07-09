@@ -1,7 +1,7 @@
 import Schedule from "../models/Schedule";
 import Group from "../models/Group";
 import { ISchedulesInputDTO } from "../interfaces/ISchedule";
-
+const setTimeFormat = require('../modules/setTimeFormat');
 
 const createSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer } = data;
@@ -67,19 +67,9 @@ const findSchedulesByDate = async (date: Date, id: String) => {
         scheduleTable.schedules.map((v) => {
             const difference = Math.floor((v.startTime.getTime() - date.getTime()) / 86400000);
             if (!difference) {
-        
-                // timeController의 내용.. Service에서 Controller를 호출해도 될까?
-                const time = v.startTime;
-                const year = time.getFullYear();
-                const month = time.getMonth()+1;
-                const date = time.getDate();
-                const hour = time.getUTCHours();
-                const minute = time.getUTCMinutes();
-                const startTime = year + "-" + month + "-" + date + "-" + hour + ":" + minute;
-        
                 const scheduleObject = {
                     "_id": v._id,
-                    "startTime": startTime,
+                    "startTime": setTimeFormat(v.startTime),
                     "title": v.title,
                     "memo": v.memo
                 };
