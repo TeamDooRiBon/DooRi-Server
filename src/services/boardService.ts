@@ -51,15 +51,19 @@ const addBoard = async (data: IBoardInputDTO) => {
 
 const findBoard = async (boardsId: mongoose.Types.ObjectId, tagData: String) => {
     try {
-        const boardList = await Board.aggregate([{ $unwind: '$post' }, {
-            $match: { _id: boardsId, "$expr": { "$eq": ["$post.tag", tagData] } }
-        }]);
-
+        const boardList = await Board.aggregate([
+            { $lookup: { from: 'users', localField: 'post.writer', foreignField: '_id', as: 'writerName' } },
+            { $unwind: '$post' },
+            { $match: { _id: boardsId, "$expr": { "$eq": ["$post.tag", tagData] } } },
+            { $project: { "writer": '$writerName.name', "content": '$post.content' } },
+          //  { $out: "boardData" }
+        ]);
         console.log(boardList);
-    } catch (error) {
-        console.log(error);
-        throw error;
-    }
+    return boardList;
+} catch (error) {
+    console.log(error);
+    throw error;
+}
 };
 
 export default {

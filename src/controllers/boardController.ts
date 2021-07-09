@@ -74,8 +74,7 @@ const getBoard = async (req: Request, res: Response) => {
         const tag = tagMatch[req.params.tag];
         const group = await groupService.findGroupById(req.params.groupId);
         let data = []
-        // if (group.boards !== null) {
-             const boardList = await boardService.findBoard(group.boards, tag);
+        const boardList = await boardService.findBoard(group.boards, tag);
         //     boardList.post.map((b) => {
         //         if (b.tag == tag) {
         //             let pushData = {
@@ -87,12 +86,12 @@ const getBoard = async (req: Request, res: Response) => {
         //     });
         // }
 
-        // return res.status(sc.OK).json({
-        //     status: sc.OK,
-        //     success: true,
-        //     message: "그룹별 보드 조회 성공",
-        //     data: data
-        // });
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "그룹별 보드 조회 성공",
+            data: boardList
+        });
     } catch (error) {
         console.log(error);
         res.status(sc.INTERNAL_SERVER_ERROR).json({
