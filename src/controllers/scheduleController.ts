@@ -1,10 +1,10 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
+const setTimeFormat = require('../modules/setTimeFormat');
 const { validationResult } = require('express-validator');
 import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
 import Schedule from "../models/Schedule";
-const setTimeFormat = require('./timeController');
 
 /**
  *  @route POST /schedule/:groupId
@@ -81,10 +81,13 @@ const getDailySchedule = async (req: Request, res: Response) => {
         const group = await groupService.findGroupById(groupId);
         const date = new Date(req.params.date);
         const day = Math.ceil((date.getTime() - group.startDate.getTime())/86400000)+1;
-
         const schedules = await scheduleService.
         findSchedulesByDate(date, groupId);   // 해당 날짜 스케쥴 찾기
-        const data = { day, date, schedules }; 
+        const data = { 
+            day, 
+            date : req.params.date, 
+            schedules
+        }; 
         
         return res.status(sc.OK).json({
             status: sc.OK,
