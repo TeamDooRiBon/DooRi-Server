@@ -53,12 +53,17 @@ const findBoard = async (boardsId: mongoose.Types.ObjectId, tagData: String) => 
     try {
         const boardList = await Board.aggregate([
             { $lookup: { from: 'users', localField: 'post.writer', foreignField: '_id', as: 'writerName' } },
-            { $unwind: '$post' },
-            { $match: { _id: boardsId, "$expr": { "$eq": ["$post.tag", tagData] } } },
-            { $project: { "writer": '$writerName.name', "content": '$post.content' } },
-          //  { $out: "boardData" }
+            { $unwind: '$post' }, {
+                $match: { _id: boardsId, "$expr": { "$eq": ["$post.tag", tagData] } }
+            },
+            {
+                $project: {
+                    "_id": "$_id",
+                    "name": { $arrayElemAt: ["$writerName.name", 0] },
+                    "content": "$post.content"
+                }
+            }
         ]);
-        console.log(boardList);
     return boardList;
 } catch (error) {
     console.log(error);
