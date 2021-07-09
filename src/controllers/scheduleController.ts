@@ -87,6 +87,7 @@ const getDailySchedule = async (req: Request, res: Response) => {
             date : req.params.date, 
             schedules
         }; 
+
         
         return res.status(sc.OK).json({
             status: sc.OK,
