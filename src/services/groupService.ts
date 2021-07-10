@@ -2,7 +2,7 @@ import Group from "../models/Group";
 import { IGroupEditDTO, IGroupInputDTO } from "../interfaces/IGroup";
 import { group } from "console";
 const images = require('../modules/image');
-
+import  mongoose  from "mongoose";
 const createGroup = async (data: IGroupInputDTO) => {
     const {
         host, inviteCode, travelName, destination,
@@ -24,7 +24,7 @@ const createGroup = async (data: IGroupInputDTO) => {
 
 const findGroupByInviteCode = async (code: String) => {
     try {
-        const group = await Group.find({ inviteCode: code }); //요기
+        const group = await Group.find({ inviteCode: code}); //요기
         return group;
     } catch (error) {
         console.log(error);
@@ -49,7 +49,7 @@ const editTravel = async (groupId: String, data: IGroupEditDTO) => {
             destination: data.destination,
             startDate: data.startDate,
             endDate: data.endDate,
-            image: images[Number(data.image)]
+            image: images[Number(data.imageIndex)]
         },
         { new: true });
         return editedTravel;
