@@ -23,3 +23,11 @@ export interface IGroupInputDTO {
     endDate: Date;
     image: String;
 }
+
+export interface IGroupEditDTO {
+    travelName?: String;
+    destination?: String;
+    startDate?: Date;
+    endDate?: Date;
+    imageIndex?: Number;
+}

@@ -1,4 +1,3 @@
-import { group } from "console";
 import express, { Request, Response } from "express";
 import { ResultWithContext } from "express-validator/src/chain";
 const sc = require('../modules/statusCode');
@@ -229,14 +228,16 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
                 message: "Not found",
             }); // 잘못된 아이디
         }
-        group.members.unshift(userId);  // 여행 그룹에 멤버 추가
+        group.members.unshift(user._id);  // 여행 그룹에 멤버 추가
         await group.save();
         user.groups.unshift(group._id);
         await user.save();
+        const newGroup = await groupService.findGroupById(groupId);
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "여행 참여 성공"
+            message: "여행 참여 성공",
+            data: newGroup
         })
 
     } catch (error) {
@@ -298,10 +299,52 @@ const checkTravel = async (req: Request, res: Response) => {
     }
 }
 
+/**
+ *  @route PATCH /travel/:groupId
+ *  @desc edit travel
+ *  @access Private
+ */
+const editTravel = async (req: Request, res: Response) => {
+    const error = validationResult(req);
+    if(!error.isEmpty()) {
+        return res.status(sc.BAD_REQUEST).json({ 
+            status: sc.BAD_REQUEST, 
+            success: false, 
+            message: "필요한 값이 없습니다." 
+        });
+    }
+    try {
+        const { travelName, destination, startDate, endDate, imageIndex } = req.body;
+        const editData = { travelName, destination, startDate, endDate, imageIndex };
+        const editedTravel = await groupService.editTravel(req.params.groupId, editData);
+        const data = {
+            "travelName": editedTravel.travelName,
+            "destination": editedTravel.destination,
+            "startDate": editedTravel.startDate,
+            "endDate": editedTravel.endDate,
+            "image": editedTravel.image
+        }
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "여행 수정 성공",
+            data: data
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({ 
+            status: sc.INTERNAL_SERVER_ERROR, 
+            success: false, 
+            message: "서버 내부 오류" 
+        });
+    }
+}
+
 export default {
     makeTravel,
     getTravel,
     getTravelInformation,
     pushMemberToTravel,
-    checkTravel
+    checkTravel,
+    editTravel
 }
