@@ -1,4 +1,3 @@
-import { group } from "console";
 import express, { Request, Response } from "express";
 import { ResultWithContext } from "express-validator/src/chain";
 const sc = require('../modules/statusCode');
@@ -229,14 +228,16 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
                 message: "Not found",
             }); // 잘못된 아이디
         }
-        group.members.unshift(userId);  // 여행 그룹에 멤버 추가
+        group.members.unshift(user._id);  // 여행 그룹에 멤버 추가
         await group.save();
         user.groups.unshift(group._id);
         await user.save();
+        const newGroup = await groupService.findGroupById(groupId);
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "여행 참여 성공"
+            message: "여행 참여 성공",
+            data: newGroup
         })
 
     } catch (error) {
@@ -313,15 +314,15 @@ const editTravel = async (req: Request, res: Response) => {
         });
     }
     try {
-        const { travelName, destination, startDate, endDate, image } = req.body;
-        const editData = { travelName, destination, startDate, endDate, image };
+        const { travelName, destination, startDate, endDate, imageIndex } = req.body;
+        const editData = { travelName, destination, startDate, endDate, imageIndex };
         const editedTravel = await groupService.editTravel(req.params.groupId, editData);
         const data = {
             "travelName": editedTravel.travelName,
             "destination": editedTravel.destination,
             "startDate": editedTravel.startDate,
             "endDate": editedTravel.endDate,
-            "imageURL": editedTravel.image
+            "image": editedTravel.image
         }
         return res.status(sc.OK).json({
             status: sc.OK,

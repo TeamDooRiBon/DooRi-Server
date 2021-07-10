@@ -34,17 +34,19 @@ const makeBoard = async (req: Request, res: Response) => {
             tag,
             content
         };
-
+        let newBoard;
         if (group["boards"] === null) {
-            await boardService.createBoard(data);
+            newBoard = await boardService.createBoard(data);
         }
         else {
-            await boardService.addBoard(data);
+            newBoard = await boardService.addBoard(data);
         }
+        const updatedBoard = await boardService.findBoard(newBoard._id, tag);
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "보드 생성 성공"
+            message: "보드 추가 성공",
+            data: updatedBoard
         });
     } catch (error) {
         console.log(error);
