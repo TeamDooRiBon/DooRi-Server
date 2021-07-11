@@ -61,7 +61,9 @@ const findSchedulesByDate = async (date: Date, id: String) => {
     try {
         const group = await Group.findById(id);
         const scheduleTable = await Schedule.findById(group.schedules);
-
+        if(!scheduleTable) {
+            return null;
+        }  //스케줄이 없을 때 null 반환
         const scheduleArray = [];
         
         scheduleTable.schedules.map((v) => {
