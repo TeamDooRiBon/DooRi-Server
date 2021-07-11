@@ -236,7 +236,8 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "여행 참여 성공"
+            message: "여행 참여 성공",
+            data: group
         })
 
     } catch (error) {
