@@ -20,7 +20,7 @@ const createBoard = async (data: IBoardInputDTO) => {
         });
         await Group.findByIdAndUpdate(groupId, { $set: { boards: boards._id } });
         await boards.save();
-        return;
+        return boards;
     } catch (error) {
         console.log(error);
         throw error;
@@ -33,7 +33,7 @@ const addBoard = async (data: IBoardInputDTO) => {
     } = data;
     try {
         const group = await Group.findById(groupId);
-        await Board.findByIdAndUpdate(group.boards, {
+        const newBoard = await Board.findByIdAndUpdate(group.boards, {
             $push: {
                 post: {
                     writer,
@@ -41,8 +41,8 @@ const addBoard = async (data: IBoardInputDTO) => {
                     content
                 }
             }
-        });
-        return;
+        }, {new : true});
+        return newBoard;
     } catch (error) {
         console.log(error);
         throw error;
