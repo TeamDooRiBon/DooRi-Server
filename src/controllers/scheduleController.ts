@@ -1,5 +1,6 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
+const setTimeFormat = require('../modules/setTimeFormat');
 const { validationResult } = require('express-validator');
 import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
@@ -80,10 +81,13 @@ const getDailySchedule = async (req: Request, res: Response) => {
         const group = await groupService.findGroupById(groupId);
         const date = new Date(req.params.date);
         const day = Math.ceil((date.getTime() - group.startDate.getTime())/86400000)+1;
-
         const schedules = await scheduleService.findSchedulesByDate(date, groupId);   // 해당 날짜 스케쥴 찾기
-        
-        const data = { day, date, schedules }; 
+        const data = { 
+            day, 
+            date : req.params.date, 
+            schedules
+        }; 
+
         
         return res.status(sc.OK).json({
             status: sc.OK,
@@ -132,10 +136,10 @@ const getOneSchedule = async (req: Request, res: Response) => {
         const data = {
             "_id" : schedule._id,
             "writer" : writer,
-            "createdAt" : schedule.createdAt,
+            "createdAt" : setTimeFormat(schedule.createdAt),
             "tilte" : schedule.title,
-            "startTime" : schedule.startTime,
-            "endTime" : schedule.endTime,
+            "startTime" : setTimeFormat(schedule.startTime),
+            "endTime" : setTimeFormat(schedule.endTime),
             "location" : schedule.location,
             "memo" : schedule.memo 
         }
