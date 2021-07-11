@@ -1,7 +1,7 @@
 import Schedule from "../models/Schedule";
 import Group from "../models/Group";
-import { ISchedulesInputDTO} from "../interfaces/ISchedule";
-
+import { ISchedulesInputDTO } from "../interfaces/ISchedule";
+const setTimeFormat = require('../modules/setTimeFormat');
 
 const createSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer } = data;
@@ -61,15 +61,17 @@ const findSchedulesByDate = async (date: Date, id: String) => {
     try {
         const group = await Group.findById(id);
         const scheduleTable = await Schedule.findById(group.schedules);
-
+        if(!scheduleTable) {
+            return null;
+        }  //스케줄이 없을 때 null 반환
         const scheduleArray = [];
-
+        
         scheduleTable.schedules.map((v) => {
             const difference = Math.floor((v.startTime.getTime() - date.getTime()) / 86400000);
             if (!difference) {
                 const scheduleObject = {
                     "_id": v._id,
-                    "startTime": v.startTime,
+                    "startTime": setTimeFormat(v.startTime),
                     "title": v.title,
                     "memo": v.memo
                 };
@@ -95,5 +97,3 @@ export default {
     findSchedulesById,
     findSchedulesByDate
 }
-
-// mongoose.LeanDocument<ISchedule>[]
