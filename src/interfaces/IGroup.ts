@@ -29,5 +29,5 @@ export interface IGroupEditDTO {
     destination?: String;
     startDate?: Date;
     endDate?: Date;
-    image?: String;
+    imageIndex?: Number;
 }
