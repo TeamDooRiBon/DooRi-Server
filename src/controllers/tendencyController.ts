@@ -128,7 +128,11 @@ const getAllResult = async (req: Request, res: Response) => {
         });
     }
 };
-
+/**
+ *  @route GET /tendency/question/:groupId
+ *  @desc get question-answer count
+ *  @access Private
+ */
 const getAnswerCount = async (req: Request, res: Response) => {
     try {
         let data = [];
