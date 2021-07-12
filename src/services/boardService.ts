@@ -83,19 +83,22 @@ const editBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String, d
             "writer": userId,
             "content": content,
             "tag": tag };
+        let editIndex = -1;
         boards.post.map((b, index) => {
             if (String(b._id) === boardId) {
                 if (b.writer != userId) {
                     return null;
                 }
+                editIndex = index;
                 boards.post[index] = Object.assign(boards.post[index], editData);
             }
         });
+        if (editIndex == -1) {
+            return -1;
+        }
         await Board.findByIdAndUpdate(group.boards, { $set: {post: boards.post}});
         await boards.save();
-        
-        const editedBoard = await findBoard(group.boards, tag);
-        return editedBoard;
+        return 1;
     } catch (error) {
         console.log(error);
         throw error;
@@ -110,19 +113,21 @@ const deleteBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String,
     try {
         const group = await Group.findById(groupId);
         const boards = await Board.findById(group.boards);
-        let removeIndex = 0;
+        let removeIndex = -1;
         boards.post.map((b, index) => {
             if (String(b._id) === boardId) {
-                if (b.writer !== userId) {
+                if (b.writer != userId) {
                     return null;
                 }
                 removeIndex = index;
             }
         });
-        boards.post.splice(removeIndex, 1);  // 스케줄 삭제
+        if ( removeIndex == -1 ) {
+            return -1;
+        }
+        boards.post.splice(removeIndex, 1);
         await boards.save();
-
-        const deletedBoard = await findBoard(group.boards, tag);
+        return 1;
     } catch (error) {
         console.log(error);
         throw error;
