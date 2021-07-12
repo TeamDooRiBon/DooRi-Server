@@ -20,7 +20,7 @@
 ### 📋 IA  
 ![DooribonIA](https://user-images.githubusercontent.com/20807197/124385082-3b0eb680-dd0f-11eb-9462-ee8f02ff981b.png)   
 
-### 💡 API 명세서 (초안)  
+### 💡 API 명세서
 [API 명세서 최종](https://github.com/TeamDooRiBon/DooRi-Server/wiki)
 
 ### 🛠 Development Environment
@@ -47,7 +47,7 @@
     "express": "^4.17.1",
     "express-validator": "^6.12.0",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.10",
+    "mongoose": "^5.13.2",
     "nanoid": "^3.1.23",
     "qs": "^6.10.1"
   }
