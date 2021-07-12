@@ -128,9 +128,9 @@ const editBoard = async (req: Request, res: Response) => {
         const group = await groupService.findGroupById(groupId);
         const editedBoard = await boardService.findBoard(group.boards, tag);
         if (result == -1) {
-            return res.status(sc.OK).json({
-                status: sc.OK,
-                success: true,
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
                 message: "해당 글이 존재하지 않습니다.",
                 data: editedBoard
             });
@@ -184,9 +184,9 @@ const editBoard = async (req: Request, res: Response) => {
         const group = await groupService.findGroupById(groupId);
         const deletedBoard = await boardService.findBoard(group.boards, tag);
         if (result == -1) {
-            return res.status(sc.OK).json({
-                status: sc.OK,
-                success: true,
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
                 message: "해당하는 글이 없습니다.",
                 data: deletedBoard
             });
