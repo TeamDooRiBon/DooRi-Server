@@ -207,7 +207,7 @@ const editSchedule = async (req: Request, res: Response) => {
         const end = new Date(endTime);
         start.setHours(start.getHours() + 9);
         end.setHours(end.getHours() + 9);
-        
+
         const editedSchedule = { title, startTime: start, endTime: end, location, memo, writer, createdAt };
 
         const group = await groupService.findGroupById(groupId);
@@ -279,6 +279,7 @@ const deleteSchedule = async (req: Request, res: Response) => {
             .indexOf(req.params.scheduleId);
 
         const date = scheduleTable.schedules[removeIndex].startTime;  // response-body를 위해 해당 날짜 미리 구해 놓는다.
+        date.setHours(date.getHours() - 9); // 시차 
         scheduleTable.schedules.splice(removeIndex, 1);  // 스케줄 삭제
         await scheduleTable.save();
 
