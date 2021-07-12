@@ -5,8 +5,9 @@ const setTimeFormat = require('../modules/setTimeFormat');
 
 const createSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer, createdAt } = data;
-
-    try { 
+    startTime.setHours(startTime.getHours() + 9);
+    endTime.setHours(endTime.getHours() + 9);
+    try {  
         const schedules = new Schedule({
             schedules : [{ 
                 title, 
@@ -29,7 +30,8 @@ const createSchedule = async (data : ISchedulesInputDTO) => {
 
 const addSchedule = async (data : ISchedulesInputDTO) => {
     const { groupId, title, startTime, endTime, location, memo, writer, createdAt } = data;
-
+    startTime.setHours(startTime.getHours() + 9);
+    endTime.setHours(endTime.getHours() + 9);
     try { 
         const group = await Group.findById(groupId);
         await Schedule.findByIdAndUpdate(group.schedules, { $push : { schedules : { 
