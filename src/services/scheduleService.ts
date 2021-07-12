@@ -73,7 +73,8 @@ const findSchedulesByDate = async (date: Date, id: String) => {
             if (!difference) {
                 const scheduleObject = {
                     "_id": v._id,
-                    "startTime": setTimeFormat(v.startTime),
+                    "startTime": v.startTime,
+                    "formatTime": setTimeFormat(v.startTime),
                     "title": v.title,
                     "memo": v.memo
                 };
