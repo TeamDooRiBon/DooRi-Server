@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
 const setTimeFormat = require('../modules/setTimeFormat');
+const getCurrentTime = require('../modules/getCurrentTime');
 const { validationResult } = require('express-validator');
 import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
@@ -25,7 +26,7 @@ const makeSchedule = async (req: Request, res: Response) => {
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
-        
+        const createdAt = getCurrentTime();
         const data = { 
             groupId : mongoose.Types.ObjectId(groupId),
             title, 
@@ -33,7 +34,8 @@ const makeSchedule = async (req: Request, res: Response) => {
             endTime, 
             location, 
             memo, 
-            writer 
+            writer,
+            createdAt
         };
 
         if (group["schedules"] === null) {
@@ -82,6 +84,14 @@ const getDailySchedule = async (req: Request, res: Response) => {
         const date = new Date(req.params.date);
         const day = Math.ceil((date.getTime() - group.startDate.getTime())/86400000)+1;
         const schedules = await scheduleService.findSchedulesByDate(date, groupId);   // 해당 날짜 스케쥴 찾기
+        if(!schedules) {
+            return res.status(sc.OK).json({
+                status: sc.OK,
+                success: true,
+                message: "일정 조회 성공",
+                data: null
+            })
+        } //그룹 내 스케줄이 아예 없을 때 null 반환
         const data = { 
             day, 
             date : req.params.date, 
@@ -123,6 +133,14 @@ const getOneSchedule = async (req: Request, res: Response) => {
 
     try {
         const group = await groupService.findGroupById(req.params.groupId);
+        if(!group.schedules) {
+            return res.status(sc.OK).json({
+                status: sc.OK,
+                success: true,
+                message: "일정 조회 성공",
+                data: null
+            })
+        } // 그룹 내 스케줄이 아예 없을 때 null 반환
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
         const schedule = scheduleTable.schedules.filter(function (schedule) {
             return String(schedule._id) === req.params.scheduleId 
@@ -181,7 +199,8 @@ const editSchedule = async (req: Request, res: Response) => {
         const { title, startTime, endTime, location, memo } = req.body;
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
-        const editedSchedule = { title, startTime, endTime, location, memo, writer };
+        const createdAt = getCurrentTime();
+        const editedSchedule = { title, startTime, endTime, location, memo, writer, createdAt };
         const group = await groupService.findGroupById(groupId);
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
 
