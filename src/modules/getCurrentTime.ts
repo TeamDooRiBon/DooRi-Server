@@ -3,8 +3,8 @@ module.exports = () => {
     const year = time.getFullYear();
     const month = time.getMonth();
     const date = time.getDate();
-    const hour = time.getUTCHours();
-    const minute = time.getUTCMinutes();
+    const hour = time.getHours() + 9;
+    const minute = time.getMinutes();
     const result = new Date(Date.UTC(year, month, date, hour, minute));
     return result;
 };
