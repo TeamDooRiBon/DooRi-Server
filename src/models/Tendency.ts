@@ -15,7 +15,11 @@ const TendencySchema = new mongoose.Schema({
         type: String,
         required: true
     }],
-    resultImage: {
+    iOSResultImage: {
+        type: String,
+        required: true
+    },
+    aOSResultImage: {
         type: String,
         required: true
     },

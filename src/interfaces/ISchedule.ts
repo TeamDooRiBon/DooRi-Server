@@ -23,4 +23,5 @@ export interface ISchedulesInputDTO {
     location? : string;
     memo? : string;
     writer? : mongoose.Types.ObjectId;
+    createdAt? : Date;
 }
