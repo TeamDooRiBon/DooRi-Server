@@ -23,6 +23,8 @@ const makeSchedule = async (req: Request, res: Response) => {
     }
     try {
         const { title, startTime, endTime, location, memo } = req.body;
+        const start = new Date(startTime);
+        const end = new Date(endTime);
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
@@ -30,8 +32,8 @@ const makeSchedule = async (req: Request, res: Response) => {
         const data = { 
             groupId : mongoose.Types.ObjectId(groupId),
             title, 
-            startTime, 
-            endTime, 
+            startTime: start, 
+            endTime: end, 
             location, 
             memo, 
             writer,
@@ -199,8 +201,15 @@ const editSchedule = async (req: Request, res: Response) => {
         const { title, startTime, endTime, location, memo } = req.body;
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
+
         const createdAt = getCurrentTime();
-        const editedSchedule = { title, startTime, endTime, location, memo, writer, createdAt };
+        const start = new Date(startTime);
+        const end = new Date(endTime);
+        start.setHours(start.getHours() + 9);
+        end.setHours(end.getHours() + 9);
+        
+        const editedSchedule = { title, startTime: start, endTime: end, location, memo, writer, createdAt };
+
         const group = await groupService.findGroupById(groupId);
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
 
