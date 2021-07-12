@@ -19,6 +19,13 @@ const getMyPage = async (req: Request, res: Response) => {
     }
     try {
         const user = await userService.findUserById(req.body.user.id);
+        if (!user) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "Not Found"
+            })
+        };
         const data = {
             "name": user.name,
             "email": user.email,

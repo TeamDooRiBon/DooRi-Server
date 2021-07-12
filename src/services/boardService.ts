@@ -4,7 +4,6 @@ import { IBoardInputDTO } from "../interfaces/IBoard";
 import groupService from "./groupService";
 import mongoose from "mongoose";
 
-
 const createBoard = async (data: IBoardInputDTO) => {
     const {
         groupId, writer, tag, content
@@ -20,7 +19,7 @@ const createBoard = async (data: IBoardInputDTO) => {
         });
         await Group.findByIdAndUpdate(groupId, { $set: { boards: boards._id } });
         await boards.save();
-        return;
+        return boards;
     } catch (error) {
         console.log(error);
         throw error;
@@ -33,7 +32,7 @@ const addBoard = async (data: IBoardInputDTO) => {
     } = data;
     try {
         const group = await Group.findById(groupId);
-        await Board.findByIdAndUpdate(group.boards, {
+        const newBoard = await Board.findByIdAndUpdate(group.boards, {
             $push: {
                 post: {
                     writer,
@@ -41,8 +40,8 @@ const addBoard = async (data: IBoardInputDTO) => {
                     content
                 }
             }
-        });
-        return;
+        }, { new: true });
+        return newBoard;
     } catch (error) {
         console.log(error);
         throw error;
@@ -64,15 +63,76 @@ const findBoard = async (boardsId: mongoose.Types.ObjectId, tagData: String) => 
                 }
             }
         ]);
-    return boardList;
-} catch (error) {
-    console.log(error);
-    throw error;
-}
+        return boardList;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const editBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String, data: IBoardInputDTO) => {
+    const {
+        boardId, content, tag
+    } = data;
+    const groupId = groupIdData;
+    try {
+        const group = await Group.findById(groupId);
+        const boards = await Board.findById(group.boards);
+        const editData = {
+            "_id": boardId,
+            "writer": userId,
+            "content": content,
+            "tag": tag };
+        boards.post.map((b, index) => {
+            if (String(b._id) === boardId) {
+                if (b.writer != userId) {
+                    return null;
+                }
+                boards.post[index] = Object.assign(boards.post[index], editData);
+            }
+        });
+        await Board.findByIdAndUpdate(group.boards, { $set: {post: boards.post}});
+        await boards.save();
+        
+        const editedBoard = await findBoard(group.boards, tag);
+        return editedBoard;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
+};
+
+const deleteBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String, data: IBoardInputDTO) => {
+    const {
+        boardId, tag
+    } = data;
+    const groupId = groupIdData;
+    try {
+        const group = await Group.findById(groupId);
+        const boards = await Board.findById(group.boards);
+        let removeIndex = 0;
+        boards.post.map((b, index) => {
+            if (String(b._id) === boardId) {
+                if (b.writer !== userId) {
+                    return null;
+                }
+                removeIndex = index;
+            }
+        });
+        boards.post.splice(removeIndex, 1);  // 스케줄 삭제
+        await boards.save();
+
+        const deletedBoard = await findBoard(group.boards, tag);
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 };
 
 export default {
     createBoard,
     addBoard,
-    findBoard
+    findBoard,
+    editBoard,
+    deleteBoard
 }

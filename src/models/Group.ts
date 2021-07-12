@@ -18,6 +18,10 @@ const GroupSchema = new mongoose.Schema({
         type: mongoose.SchemaTypes.ObjectId,
         ref: "Wish"
     },
+    tendencies: {
+        type: mongoose.SchemaTypes.ObjectId,
+        ref: "Tendency"
+    },
     inviteCode: {
         type: String,
         required: true,

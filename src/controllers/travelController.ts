@@ -1,10 +1,9 @@
-import { group } from "console";
 import express, { Request, Response } from "express";
-import { ResultWithContext } from "express-validator/src/chain";
 const sc = require('../modules/statusCode');
 const image = require('../modules/image');
 const { validationResult } = require('express-validator');
 const generateCode = require('./inviteController');
+const setTimeFormat = require('../modules/setTimeFormat');
 import { groupService, mainService, userService } from "../services";
 
 /**
@@ -96,8 +95,8 @@ const getTravel = async (req: Request, res: Response) => {
             });
             let nowTravelData = {
                 _id: t._id,
-                startDate: t.startDate,
-                endDate: t.endDate,
+                startDate: setTimeFormat(t.startDate),
+                endDate: setTimeFormat(t.endDate),
                 travelName: t.travelName,
                 image: t.image,
                 destination: t.destination,
@@ -112,8 +111,8 @@ const getTravel = async (req: Request, res: Response) => {
             });
             let comeTravelData = {
                 _id: t._id,
-                startDate: t.startDate,
-                endDate: t.endDate,
+                startDate: setTimeFormat(t.startDate),
+                endDate: setTimeFormat(t.endDate),
                 travelName: t.travelName,
                 image: t.image,
                 destination: t.destination,
@@ -128,8 +127,8 @@ const getTravel = async (req: Request, res: Response) => {
             });
             let endTravelData = {
                 _id: t._id,
-                startDate: t.startDate,
-                endDate: t.endDate,
+                startDate: setTimeFormat(t.startDate),
+                endDate: setTimeFormat(t.endDate),
                 travelName: t.travelName,
                 image: t.image,
                 destination: t.destination,
@@ -192,8 +191,8 @@ const getTravelInformation = async (req: Request, res: Response) => {
             message: "여행 정보 조회 성공",
             data: {
                 travelName: group.travelName,
-                startDate: group.startDate,
-                endDate: group.endDate,
+                startDate: setTimeFormat(group.startDate),
+                endDate: setTimeFormat(group.endDate),
                 destination: group.destination,
                 members: membersArray
             }
@@ -208,6 +207,11 @@ const getTravelInformation = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ *  @route POST /travel/:groupId
+ *  @desc POST add member to travel
+ *  @access Private
+ */
 const pushMemberToTravel = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
@@ -229,14 +233,16 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
                 message: "Not found",
             }); // 잘못된 아이디
         }
-        group.members.unshift(userId);  // 여행 그룹에 멤버 추가
+        group.members.unshift(user._id);  // 여행 그룹에 멤버 추가
         await group.save();
         user.groups.unshift(group._id);
         await user.save();
+        const newGroup = await groupService.findGroupById(groupId);
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
-            message: "여행 참여 성공"
+            message: "여행 참여 성공",
+            data: newGroup
         })
 
     } catch (error) {
@@ -278,8 +284,8 @@ const checkTravel = async (req: Request, res: Response) => {
             "travelName": resultTravel[0].travelName,
             "host": hostObject.name,
             "destination": resultTravel[0].destination,
-            "startDate": resultTravel[0].startDate,
-            "endDate": resultTravel[0].endDate,
+            "startDate": setTimeFormat(resultTravel[0].startDate),
+            "endDate": setTimeFormat(resultTravel[0].endDate),
             "image": resultTravel[0].image
         };
         return res.status(200).json({
@@ -313,15 +319,15 @@ const editTravel = async (req: Request, res: Response) => {
         });
     }
     try {
-        const { travelName, destination, startDate, endDate, image } = req.body;
-        const editData = { travelName, destination, startDate, endDate, image };
+        const { travelName, destination, startDate, endDate, imageIndex } = req.body;
+        const editData = { travelName, destination, startDate, endDate, imageIndex };
         const editedTravel = await groupService.editTravel(req.params.groupId, editData);
         const data = {
             "travelName": editedTravel.travelName,
             "destination": editedTravel.destination,
-            "startDate": editedTravel.startDate,
-            "endDate": editedTravel.endDate,
-            "imageURL": editedTravel.image
+            "startDate": setTimeFormat(editedTravel.startDate),
+            "endDate": setTimeFormat(editedTravel.endDate),
+            "image": editedTravel.image
         }
         return res.status(sc.OK).json({
             status: sc.OK,
