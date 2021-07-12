@@ -117,13 +117,23 @@ const editBoard = async (req: Request, res: Response) => {
             boardId: req.params.boardId,
             content: req.body.content,
             tag };
-        const editedBoard = await boardService.editBoard(user.id, req.params.groupId, editData);
-        if(!editedBoard) {
+        const result = await boardService.editBoard(user.id, req.params.groupId, editData);
+        if (!result) {
             return res.status(sc.SERVICE_UNAVAILABLE).json({
                 status: sc.SERVICE_UNAVAILABLE,
                 success: false,
                 message: "수정 권한 없음" //유저와 작성자가 다름
             }); 
+        }
+        const group = await groupService.findGroupById(groupId);
+        const editedBoard = await boardService.findBoard(group.boards, tag);
+        if (result == -1) {
+            return res.status(sc.OK).json({
+                status: sc.OK,
+                success: true,
+                message: "해당 글이 존재하지 않습니다.",
+                data: editedBoard
+            });
         }
         return res.status(sc.OK).json({
             status: sc.OK,
@@ -156,34 +166,37 @@ const editBoard = async (req: Request, res: Response) => {
         });
     }
     try {
-        // const user = req.body.user;
-        // const tag = tagMatch[req.params.tag];
-        // const editData = { 
-        //     boardId: req.params.boardId,
-        //     tag };
-        // const groupId = req.params.groupId;
-        // const group = groupService.findGroupById(groupId);
-        // if (!group) {
-        //     return res.status(sc.NOT_FOUND).json({
-        //         status: sc.NOT_FOUND,
-        //         success: false,
-        //         message: "not found"
-        //     });
-        // }
-        // const deletedBoard = await boardService.deleteBoard(user.id, req.params.groupId, editData);
-        // if (!deletedBoard) {
-        //     return res.status(sc.SERVICE_UNAVAILABLE).json({ 
-        //         status: sc.SERVICE_UNAVAILABLE,
-        //         success: false,
-        //         message: "삭제 권한이 없습니다."
-        //     });
-        // }
-        // return res.status(sc.OK).json({
-        //     status: sc.OK,
-        //     success: true,
-        //     message: "일정 삭제 완료",
-        //     data: schedules
-        // });
+        const user = req.body.user;
+        const tag = tagMatch[req.params.tag];
+        const deleteData = { 
+            boardId: req.params.boardId,
+            tag: tag
+        };
+        const groupId = req.params.groupId;
+        const result = await boardService.deleteBoard(user.id, groupId, deleteData);
+        if (!result) {
+            return res.status(sc.SERVICE_UNAVAILABLE).json({ 
+                status: sc.SERVICE_UNAVAILABLE,
+                success: false,
+                message: "삭제 권한이 없습니다."
+            });
+        }
+        const group = await groupService.findGroupById(groupId);
+        const deletedBoard = await boardService.findBoard(group.boards, tag);
+        if (result == -1) {
+            return res.status(sc.OK).json({
+                status: sc.OK,
+                success: true,
+                message: "해당하는 글이 없습니다.",
+                data: deletedBoard
+            });
+        }
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "보드 삭제 완료",
+            data: deletedBoard
+        });
     } catch (error) {
         console.log(error);
         res.status(sc.INTERNAL_SERVER_ERROR).json({
