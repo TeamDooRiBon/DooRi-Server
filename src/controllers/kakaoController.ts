@@ -31,9 +31,11 @@ const getKakaoUser = async (req: Request, res: Response) => {
         })//객체를 string 으로 변환
     });
   
-    const access_token = tokenData.data.access_token;
+    let access_token = tokenData.data.access_token;
     const refresh_token = tokenData.data.refresh_token;
     
+    console.log(access_token);
+    console.log(refresh_token);
     */
     try {
         const tokenInfo = await axios({
