@@ -57,7 +57,7 @@ const findBoard = async (boardsId: mongoose.Types.ObjectId, tagData: String) => 
             },
             {
                 $project: {
-                    "_id": "$_id",
+                    "_id": "$post._id",
                     "name": { $arrayElemAt: ["$writerName.name", 0] },
                     "content": "$post.content"
                 }
@@ -112,6 +112,10 @@ const deleteBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String,
     const groupId = groupIdData;
     try {
         const group = await Group.findById(groupId);
+        if (!group.boards) {
+            return null;
+        }  //보드가 아직 생성 되지 않았을 경우 null 반환
+
         const boards = await Board.findById(group.boards);
         let removeIndex = -1;
         boards.post.map((b, index) => {
