@@ -82,6 +82,14 @@ const getDailySchedule = async (req: Request, res: Response) => {
         const date = new Date(req.params.date);
         const day = Math.ceil((date.getTime() - group.startDate.getTime())/86400000)+1;
         const schedules = await scheduleService.findSchedulesByDate(date, groupId);   // 해당 날짜 스케쥴 찾기
+        if(!schedules) {
+            return res.status(sc.OK).json({
+                status: sc.OK,
+                success: true,
+                message: "일정 조회 성공",
+                data: null
+            })
+        } //그룹 내 스케줄이 아예 없을 때 null 반환
         const data = { 
             day, 
             date : req.params.date, 
@@ -123,6 +131,14 @@ const getOneSchedule = async (req: Request, res: Response) => {
 
     try {
         const group = await groupService.findGroupById(req.params.groupId);
+        if(!group.schedules) {
+            return res.status(sc.OK).json({
+                status: sc.OK,
+                success: true,
+                message: "일정 조회 성공",
+                data: null
+            })
+        } // 그룹 내 스케줄이 아예 없을 때 null 반환
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
         const schedule = scheduleTable.schedules.filter(function (schedule) {
             return String(schedule._id) === req.params.scheduleId 

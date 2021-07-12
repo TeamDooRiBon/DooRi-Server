@@ -11,7 +11,7 @@ const createGroup = async (data: IGroupInputDTO) => {
     try {
         const group = await Group.create({
             members: [], schedules: null, boards: null,
-            wishes: null, host, inviteCode,
+            wishes: null, tendencies: null, host, inviteCode,
             travelName, destination,
             startDate, endDate, image
         });
