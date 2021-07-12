@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 const sc = require('../modules/statusCode');
 const setTimeFormat = require('../modules/setTimeFormat');
+const getCurrentTime = require('../modules/getCurrentTime');
 const { validationResult } = require('express-validator');
 import { userService, groupService, scheduleService } from "../services";
 import mongoose from "mongoose";
@@ -25,7 +26,7 @@ const makeSchedule = async (req: Request, res: Response) => {
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
-        
+        const createdAt = getCurrentTime();
         const data = { 
             groupId : mongoose.Types.ObjectId(groupId),
             title, 
@@ -33,7 +34,8 @@ const makeSchedule = async (req: Request, res: Response) => {
             endTime, 
             location, 
             memo, 
-            writer 
+            writer,
+            createdAt
         };
 
         if (group["schedules"] === null) {
@@ -197,7 +199,8 @@ const editSchedule = async (req: Request, res: Response) => {
         const { title, startTime, endTime, location, memo } = req.body;
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
-        const editedSchedule = { title, startTime, endTime, location, memo, writer };
+        const createdAt = getCurrentTime();
+        const editedSchedule = { title, startTime, endTime, location, memo, writer, createdAt };
         const group = await groupService.findGroupById(groupId);
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
 
