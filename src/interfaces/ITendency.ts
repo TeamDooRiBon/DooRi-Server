@@ -13,7 +13,8 @@ export interface ITendencies {
     member: IMember;
     title: String;
     tag: [String];
-    resultImage: String;
+    iOSResultImage: String;
+    aOSResultImage: String;
     thumbnail: String;
 }
 

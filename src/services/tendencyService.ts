@@ -22,7 +22,8 @@ const createTendency = async (choice: any, data: ITendencies, groupId: String) =
         member: data.member,
         title: data.title,
         tag: data.tag,
-        resultImage: data.resultImage,
+        iOSResultImage: data.iOSResultImage,
+        aOSResultImage: data.aOSResultImage,
         thumbnail: data.thumbnail
     });
     await Group.findByIdAndUpdate(groupId, { $set: { tendencies: newTendency._id } });
@@ -38,7 +39,8 @@ const addCountResult = async (choice: any, data: ITendencies, groupId: String) =
             member: data.member,
             title: data.title,
             tag: data.tag,
-            resultImage: data.resultImage,
+            iOSResultImage: data.iOSResultImage,
+            aOSResultImage: data.aOSResultImage,
             thumbnail: data.thumbnail
         });
         await Tendency.findByIdAndUpdate(group.tendencies, { count: choice });

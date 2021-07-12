@@ -4,7 +4,8 @@ module.exports = {
         tag: [
             "#새로운걸원해", "#고민보다GO", "#무한도전"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     1: {
@@ -12,7 +13,8 @@ module.exports = {
         tag: [
             "#계획도장깨기", "#여행리더", "#완벽주의자"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     2: {
@@ -20,7 +22,8 @@ module.exports = {
         tag: [
             "#놀땐놀고", "#쉴땐쉬자", "#마이웨이"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     3: {
@@ -28,7 +31,8 @@ module.exports = {
         tag: [
             "#흘러가는대로", "#감성충만", "#낭만을찾아서"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     4: {
@@ -36,7 +40,8 @@ module.exports = {
         tag: [
             "#나만의세상", "#마음속에저장", "#사유의즐거움"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     5: {
@@ -44,7 +49,8 @@ module.exports = {
         tag: [
             "#리액션자판기", "#호불호없음", "#배려왕"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     6: {
@@ -52,7 +58,8 @@ module.exports = {
         tag: [
             "#친화력갑", "#분위기메이커", "#노는게제일좋아"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
     7: {
@@ -60,7 +67,8 @@ module.exports = {
         tag: [
             "#카르페디엠", "#힐링이좋아", "#현지인바이브"
         ],
-        resultImage: "~~~",
+        iOSResultImage: "~~~",
+        aOSResultImage: "~~~",
         thumbnail: "~~~"
     },
 };
