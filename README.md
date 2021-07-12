@@ -21,7 +21,7 @@
 ![DooribonIA](https://user-images.githubusercontent.com/20807197/124385082-3b0eb680-dd0f-11eb-9462-ee8f02ff981b.png)   
 
 ### 💡 API 명세서 (초안)  
-[API 명세서 노션](https://www.notion.so/fc2b508e4a3c402d8556b32f47bbfdea?v=9dace5ed089b4460b328147a0563af0e)
+[API 명세서 최종](https://github.com/TeamDooRiBon/DooRi-Server/wiki)
 
 ### 🛠 Development Environment
 
