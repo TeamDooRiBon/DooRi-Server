@@ -4,7 +4,7 @@ import { ISchedulesInputDTO } from "../interfaces/ISchedule";
 const setTimeFormat = require('../modules/setTimeFormat');
 
 const createSchedule = async (data : ISchedulesInputDTO) => {
-    const { groupId, title, startTime, endTime, location, memo, writer } = data;
+    const { groupId, title, startTime, endTime, location, memo, writer, createdAt } = data;
 
     try { 
         const schedules = new Schedule({
@@ -14,7 +14,8 @@ const createSchedule = async (data : ISchedulesInputDTO) => {
                 endTime, 
                 location, 
                 memo, 
-                writer }]
+                writer,
+                createdAt }]
         });
         await Group.findByIdAndUpdate(groupId , { $set : { schedules : schedules._id }});
         await schedules.save();
@@ -27,7 +28,7 @@ const createSchedule = async (data : ISchedulesInputDTO) => {
 
 
 const addSchedule = async (data : ISchedulesInputDTO) => {
-    const { groupId, title, startTime, endTime, location, memo, writer } = data;
+    const { groupId, title, startTime, endTime, location, memo, writer, createdAt } = data;
 
     try { 
         const group = await Group.findById(groupId);
@@ -37,7 +38,8 @@ const addSchedule = async (data : ISchedulesInputDTO) => {
             endTime, 
             location, 
             memo, 
-            writer 
+            writer,
+            createdAt
         }}});
     
         return;

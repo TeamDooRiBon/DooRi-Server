@@ -49,7 +49,8 @@ const addResult = async (req: Request, res: Response) => {
             member: user._id,
             title: results[maxIndex].title,
             tag: results[maxIndex].tag,
-            resultImage: results[maxIndex].resultImage,
+            iOSResultImage: results[maxIndex].iOSResultImage,
+            aOSResultImage: results[maxIndex].aOSResultImage,
             thumbnail: results[maxIndex].thumbnail
         };
         let newScoreArray = [], questionIndex = 0;
@@ -58,7 +59,8 @@ const addResult = async (req: Request, res: Response) => {
             member: user.name,
             title: results[maxIndex].title,
             tag: results[maxIndex].tag,
-            resultImage: results[maxIndex].resultImage,
+            iOSResultImage: results[maxIndex].iOSResultImage,
+            aOSResultImage: results[maxIndex].aOSResultImage,
             thumbnail: results[maxIndex].thumbnail
         }
         if (!currentArray) {    //현재 성향 테스트 결과가 하나도 없을 때
