@@ -233,6 +233,13 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
                 message: "Not found",
             }); // 잘못된 아이디
         }
+        if (user.groups.indexOf(group._id) >= 0) {
+            return res.status(sc.CONFLICT).json({
+                status: sc.CONFLICT,
+                success: false,
+                message: "해당 그룹에 속한 사용자"
+            })
+        }
         group.members.unshift(user._id);  // 여행 그룹에 멤버 추가
         await group.save();
         user.groups.unshift(group._id);
