@@ -78,7 +78,6 @@ const getBoard = async (req: Request, res: Response) => {
         const tag = tagMatch[req.params.tag];
         const group = await groupService.findGroupById(req.params.groupId);
         const boardList = await boardService.findBoard(group.boards, tag);
-
         return res.status(sc.OK).json({
             status: sc.OK,
             success: true,
