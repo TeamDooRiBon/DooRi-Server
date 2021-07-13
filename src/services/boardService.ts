@@ -75,6 +75,7 @@ const editBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String, d
     } = data;
     const groupId = groupIdData;
     try {
+        let returnCode = 200;
         const group = await Group.findById(groupId);
         const boards = await Board.findById(group.boards);
         const editData = {
@@ -86,18 +87,23 @@ const editBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String, d
         boards.post.map((b, index) => {
             if (String(b._id) === boardId) {
                 if (b.writer != userId) {
-                    return null;
+                    returnCode = 403;
+                    return
                 }
                 editIndex = index;
                 boards.post[index] = Object.assign(boards.post[index], editData);
             }
         });
+        if ( returnCode == 403 ) {
+            return returnCode;
+        }
         if (editIndex == -1) {
-            return -1;
+            returnCode = 404;
+            return returnCode;
         }
         await Board.findByIdAndUpdate(group.boards, { $set: {post: boards.post}});
         await boards.save();
-        return 1;
+        return returnCode;
     } catch (error) {
         console.log(error);
         throw error;
@@ -110,6 +116,7 @@ const deleteBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String,
     } = data;
     const groupId = groupIdData;
     try {
+        let returnCode = 200;
         const group = await Group.findById(groupId);
         if (!group.boards) {
             return null;
@@ -120,17 +127,22 @@ const deleteBoard = async (userId: mongoose.Types.ObjectId, groupIdData: String,
         boards.post.map((b, index) => {
             if (String(b._id) === boardId) {
                 if (b.writer != userId) {
-                    return null;
+                    returnCode = 403;
+                    return;
                 }
                 removeIndex = index;
             }
         });
+        if ( returnCode == 403 ) {
+            return returnCode;
+        }
         if ( removeIndex == -1 ) {
-            return -1;
+            returnCode = 404;
+            return returnCode;
         }
         boards.post.splice(removeIndex, 1);
         await boards.save();
-        return 1;
+        return returnCode;
     } catch (error) {
         console.log(error);
         throw error;

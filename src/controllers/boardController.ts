@@ -117,16 +117,16 @@ const editBoard = async (req: Request, res: Response) => {
             content: req.body.content,
             tag };
         const result = await boardService.editBoard(user.id, req.params.groupId, editData);
-        if (!result) {
-            return res.status(sc.SERVICE_UNAVAILABLE).json({
-                status: sc.SERVICE_UNAVAILABLE,
+        if (result === 403) {
+            return res.status(sc.FORBIDDEN).json({
+                status: sc.FORBIDDEN,
                 success: false,
                 message: "수정 권한 없음" //유저와 작성자가 다름
             }); 
         }
         const group = await groupService.findGroupById(groupId);
         const editedBoard = await boardService.findBoard(group.boards, tag);
-        if (result == -1) {
+        if (result === 404) {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
@@ -173,16 +173,16 @@ const editBoard = async (req: Request, res: Response) => {
         };
         const groupId = req.params.groupId;
         const result = await boardService.deleteBoard(user.id, groupId, deleteData);
-        if (!result) {
-            return res.status(sc.SERVICE_UNAVAILABLE).json({ 
-                status: sc.SERVICE_UNAVAILABLE,
+        if (result == 403) {
+            return res.status(sc.FORBIDDEN).json({ 
+                status: sc.FORBIDDEN,
                 success: false,
                 message: "삭제 권한이 없습니다."
             });
         }
         const group = await groupService.findGroupById(groupId);
         const deletedBoard = await boardService.findBoard(group.boards, tag);
-        if (result == -1) {
+        if (result == 404) {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
