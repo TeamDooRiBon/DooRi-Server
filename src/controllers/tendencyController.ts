@@ -160,14 +160,15 @@ const getAnswerCount = async (req: Request, res: Response) => {
                 data: data
             });
         }
-        let index = 0;
-        let contentArray = [];
+        let outIndex = -1; // 외부 카운트 인덱스
+        let index = 0; // 내부 카운트 인덱스
         questions.map((question) => {
+            let contentArray = [];
+            outIndex++;
             question.content.map((item) => {
-                item.count += 1;
                 let element = {
                     answer: item.answer,
-                    count: item.count
+                    count: count[outIndex][index++]
                 }
                 contentArray.push(element);
             });
@@ -176,6 +177,7 @@ const getAnswerCount = async (req: Request, res: Response) => {
                 content: contentArray
             }
             data.push(resultData);
+            index = 0;
         });
         return res.status(sc.OK).json({
             status: sc.OK,
