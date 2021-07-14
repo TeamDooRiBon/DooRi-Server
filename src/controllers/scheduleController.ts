@@ -46,7 +46,7 @@ const makeSchedule = async (req: Request, res: Response) => {
         else {
             await scheduleService.addSchedule(data);
         }
-
+        
         const date = new Date(startTime);
         const schedules = await scheduleService.findSchedulesByDate(date, groupId);
 

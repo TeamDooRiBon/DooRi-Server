@@ -63,15 +63,21 @@ const findSchedulesById = async (id: String) => {
 
 const findSchedulesByDate = async (date: Date, id: String) => {
     try {
+        const year = date.getFullYear();
+        const month = date.getMonth()+1;
+        const day = date.getDate();
+        
+        // 해당 일자 00:00 으로 baseDate설정
+        // 시차 9시간 더해주기
+        const baseDate = new Date(year.toString()+"-"+month.toString()+"-"+day.toString()+" 09:00:00");
         const group = await Group.findById(id);
         const scheduleTable = await Schedule.findById(group.schedules);
         if(!scheduleTable) {
             return null;
         }  //스케줄이 없을 때 null 반환
         const scheduleArray = [];
-        
         scheduleTable.schedules.map((v) => {
-            const difference = Math.floor((v.startTime.getTime() - date.getTime()) / 86400000);
+            const difference = Math.floor((v.startTime.getTime() - baseDate.getTime()) / 86400000);
             if (!difference) {
                 const scheduleObject = {
                     "_id": v._id,
