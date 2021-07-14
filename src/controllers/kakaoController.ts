@@ -77,9 +77,9 @@ const getKakaoUser = async (req: Request, res: Response) => {
         });  // user 정보 받아오기
         const checkUser = await userService.findUserByEmail({ email: user.data.kakao_account.email });
         const data = {
-            name: user.data.properties.nickname,
+            name: user.data.kakao_account.profile.nickname,
             email: user.data.kakao_account.email,
-            profileImage: user.data.properties.profile_image
+            profileImage: user.data.kakao_account.profile.profile_image_url
         }
         if (!checkUser) {
             //DB에 없는 유저는 새로 생성한 후 토큰 발급한다.
