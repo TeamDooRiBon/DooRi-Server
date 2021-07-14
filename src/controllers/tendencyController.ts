@@ -15,9 +15,7 @@ const getQuestion = async (req: Request, res: Response) => {
             status: sc.OK,
             success: true,
             message: "성향테스트 질문 조회 성공",
-            data: {
-                question: questions
-            }
+            data: questions
         });
     } catch (error) {
         console.log(error);
@@ -141,12 +139,17 @@ const getAnswerCount = async (req: Request, res: Response) => {
         let count = await tendencyService.getCountArray(req.params.groupId);
         if (!count) {
             questions.map((question) => {
+                let contentArray = [];
+                question.content.map((item) => {
+                    let element = {
+                        answer: item.answer,
+                        count: 0
+                    };
+                    contentArray.push(element);
+                });
                 const resultData = {
                     title: question.title,
-                    content: {
-                        answer: question.content.answer,
-                        count: [0, 0, 0, 0]
-                    }
+                    content: contentArray
                 };
                 data.push(resultData);
             });
@@ -158,13 +161,19 @@ const getAnswerCount = async (req: Request, res: Response) => {
             });
         }
         let index = 0;
+        let contentArray = [];
         questions.map((question) => {
+            question.content.map((item) => {
+                item.count += 1;
+                let element = {
+                    answer: item.answer,
+                    count: item.count
+                }
+                contentArray.push(element);
+            });
             const resultData = {
                 title: question.title,
-                content: {
-                    answer: question.content.answer,
-                    count: count[index++]
-                }
+                content: contentArray
             }
             data.push(resultData);
         });
