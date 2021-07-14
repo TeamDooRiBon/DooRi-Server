@@ -27,7 +27,7 @@ module.exports = {
         thumbnail: "https://dooribon.s3.ap-northeast-2.amazonaws.com/resultCard/img_card_zeukheung.png"
     },
     3: {
-        title: "낭만적인 방랑가",
+        title: "낭만적인 방랑자",
         tag: [
             "#흘러가는대로", "#감성충만", "#낭만을찾아서"
         ],
