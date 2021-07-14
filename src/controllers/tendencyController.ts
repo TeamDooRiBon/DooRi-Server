@@ -15,9 +15,7 @@ const getQuestion = async (req: Request, res: Response) => {
             status: sc.OK,
             success: true,
             message: "성향테스트 질문 조회 성공",
-            data: {
-                question: questions
-            }
+            data: questions
         });
     } catch (error) {
         console.log(error);
@@ -141,12 +139,17 @@ const getAnswerCount = async (req: Request, res: Response) => {
         let count = await tendencyService.getCountArray(req.params.groupId);
         if (!count) {
             questions.map((question) => {
+                let contentArray = [];
+                question.content.map((item) => {
+                    let element = {
+                        answer: item.answer,
+                        count: 0
+                    };
+                    contentArray.push(element);
+                });
                 const resultData = {
                     title: question.title,
-                    content: {
-                        answer: question.content.answer,
-                        count: [0, 0, 0, 0]
-                    }
+                    content: contentArray
                 };
                 data.push(resultData);
             });
@@ -157,16 +160,24 @@ const getAnswerCount = async (req: Request, res: Response) => {
                 data: data
             });
         }
-        let index = 0;
+        let outIndex = -1; // 외부 카운트 인덱스
+        let index = 0; // 내부 카운트 인덱스
         questions.map((question) => {
+            let contentArray = [];
+            outIndex++;
+            question.content.map((item) => {
+                let element = {
+                    answer: item.answer,
+                    count: count[outIndex][index++]
+                }
+                contentArray.push(element);
+            });
             const resultData = {
                 title: question.title,
-                content: {
-                    answer: question.content.answer,
-                    count: count[index++]
-                }
+                content: contentArray
             }
             data.push(resultData);
+            index = 0;
         });
         return res.status(sc.OK).json({
             status: sc.OK,
