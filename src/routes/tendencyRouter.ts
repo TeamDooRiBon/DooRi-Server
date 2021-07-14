@@ -8,5 +8,6 @@ router.get('/question', tendencyController.getQuestion);
 router.get('/question/:groupId', auth, tendencyController.getAnswerCount);
 router.post('/:groupId', auth, tendencyController.addResult);
 router.get('/:groupId', auth, tendencyController.getAllResult);
+router.get('/result/main', auth, tendencyController.getTendencyResult);
 
 export default router;

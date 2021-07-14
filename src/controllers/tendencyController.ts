@@ -195,9 +195,51 @@ const getAnswerCount = async (req: Request, res: Response) => {
     }
 };
 
+/**
+ *  @route GET /tendency/result/main
+ *  @desc get main view test result
+ *  @access Private
+ */
+const getTendencyResult = async (req: Request, res: Response) => {
+    const { score } = req.body;
+    try {
+        const user = await userService.findUserById(req.body.user.id);
+        let maxScore = 0, maxIndex = 0, index = 0;
+        score.map((num) => {
+            if (maxScore < num) {
+                maxScore = num;
+                maxIndex = index;
+            }
+            index++;
+        });
+        const responseData = {
+            member: user.name,
+            title: results[maxIndex].title,
+            tag: results[maxIndex].tag,
+            iOSResultImage: results[maxIndex].iOSResultImage,
+            aOSResultImage: results[maxIndex].aOSResultImage,
+            thumbnail: results[maxIndex].thumbnail
+        }
+        return res.status(sc.OK).json({
+            status: sc.OK,
+            success: true,
+            message: "메인 뷰 성향테스트 결과 조회 성공",
+            data: responseData
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(sc.INTERNAL_SERVER_ERROR).json({
+            status: sc.INTERNAL_SERVER_ERROR,
+            success: false,
+            message: "서버 내부 오류"
+        });
+    }
+};
+
 export default {
     getQuestion,
     addResult,
     getAllResult,
-    getAnswerCount
+    getAnswerCount,
+    getTendencyResult
 }
