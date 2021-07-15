@@ -18,7 +18,8 @@
 > 프로젝트 기간: 2021.06.26 ~ 2021.07.17
 
 ### 📋 IA  
-![DooribonIA](https://user-images.githubusercontent.com/20807197/124385082-3b0eb680-dd0f-11eb-9462-ee8f02ff981b.png)   
+![앱잼용 IA](https://user-images.githubusercontent.com/20807197/125770127-268ecdc4-b51e-428b-b87e-3335f22256cf.png)
+   
 
 ### 💡 API 명세서
 [API 명세서 최종](https://github.com/TeamDooRiBon/DooRi-Server/wiki)
