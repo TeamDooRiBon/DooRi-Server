@@ -2,9 +2,10 @@
 ## Dooribon Server
  
 <div>  
-  
-<img src = "https://user-images.githubusercontent.com/20807197/124384313-8921bb00-dd0b-11eb-8fea-71ad08e884be.png" width="200px" height="280px"/> 
 
+![image](https://user-images.githubusercontent.com/20807197/125810428-f963153a-d8d6-400a-9369-8f7da4a04df2.png)
+
+ 
 </div>      
 
 ### 작은 움직임이 만드는 우리다운 여행 두리번   
