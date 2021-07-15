@@ -24,7 +24,7 @@ const createGroup = async (data: IGroupInputDTO) => {
 
 const findGroupByInviteCode = async (code: String) => {
     try {
-        const group = await Group.find({ inviteCode: code}); //요기
+        const group = await Group.find({ inviteCode: code});
         return group;
     } catch (error) {
         console.log(error);
