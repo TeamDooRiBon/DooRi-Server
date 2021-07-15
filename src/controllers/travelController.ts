@@ -175,7 +175,7 @@ const getTravelInformation = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "404 Not found"
+                message: "잘못된 그룹 id입니다."
             })   
         }
         let membersArray = [];
@@ -230,7 +230,7 @@ const pushMemberToTravel = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "Not found",
+                message: "잘못된 유저 id입니다.",
             }); // 잘못된 아이디
         }
         if (user.groups.indexOf(group._id) >= 0) {

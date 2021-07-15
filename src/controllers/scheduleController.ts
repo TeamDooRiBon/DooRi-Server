@@ -28,6 +28,13 @@ const makeSchedule = async (req: Request, res: Response) => {
         const writer = req.body.user.id;
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "잘못된 그룹 id입니다."
+            })   
+        }
         const createdAt = getCurrentTime();
         const data = { 
             groupId : mongoose.Types.ObjectId(groupId),
@@ -83,6 +90,13 @@ const getDailySchedule = async (req: Request, res: Response) => {
     try {
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "잘못된 그룹 id입니다."
+            })   
+        }
         const date = new Date(req.params.date);
         const day = Math.ceil((date.getTime() - group.startDate.getTime())/86400000)+1;
         const schedules = await scheduleService.findSchedulesByDate(date, groupId);   // 해당 날짜 스케쥴 찾기
@@ -135,6 +149,13 @@ const getOneSchedule = async (req: Request, res: Response) => {
 
     try {
         const group = await groupService.findGroupById(req.params.groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "잘못된 그룹 id입니다."
+            })   
+        }
         if(!group.schedules) {
             return res.status(sc.OK).json({
                 status: sc.OK,
@@ -211,6 +232,13 @@ const editSchedule = async (req: Request, res: Response) => {
         const editedSchedule = { title, startTime: start, endTime: end, location, memo, writer, createdAt };
 
         const group = await groupService.findGroupById(groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "잘못된 그룹 id입니다."
+            })   
+        }
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));
 
         scheduleTable.schedules.map((v, index) => {
@@ -260,8 +288,8 @@ const deleteSchedule = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "not found"
-            });
+                message: "잘못된 그룹 id입니다."
+            })   
         }
         const scheduleTable = await scheduleService.findSchedulesById(String(group.schedules));  // 스케줄 테이블 찾기
         const deleteSchedule = scheduleTable.schedules.find(
@@ -271,7 +299,7 @@ const deleteSchedule = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({ 
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "not found"
+                message: "잘못된 일정 id입니다."
             });
         }  // 해당 일정이 없을 때
         const removeIndex = scheduleTable.schedules

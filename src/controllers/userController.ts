@@ -23,7 +23,7 @@ const getMyPage = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "Not Found"
+                message: "잘못된 유저 id입니다."
             })
         };
         const data = {

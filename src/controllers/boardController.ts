@@ -29,7 +29,13 @@ const makeBoard = async (req: Request, res: Response) => {
         const tag = tagMatch[req.params.tag];
         const groupId = req.params.groupId;
         const group = await groupService.findGroupById(groupId);
-
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "잘못된 그룹 id 입니다."
+            })   
+        }
         const data = {
             groupId: mongoose.Types.ObjectId(groupId),
             writer,
@@ -77,6 +83,13 @@ const getBoard = async (req: Request, res: Response) => {
     try {
         const tag = tagMatch[req.params.tag];
         const group = await groupService.findGroupById(req.params.groupId);
+        if (!group) {
+            return res.status(sc.NOT_FOUND).json({
+                status: sc.NOT_FOUND,
+                success: false,
+                message: "잘못된 그룹 id 입니다."
+            })   
+        }
         const boardList = await boardService.findBoard(group.boards, tag);
         return res.status(sc.OK).json({
             status: sc.OK,
@@ -112,17 +125,18 @@ const editBoard = async (req: Request, res: Response) => {
         const user = req.body.user;
         const groupId = req.params.groupId;
         const tag = tagMatch[req.params.tag];
-        const editData = { 
+        const editData = {
             boardId: req.params.boardId,
             content: req.body.content,
-            tag };
+            tag
+        };
         const result = await boardService.editBoard(user.id, req.params.groupId, editData);
         if (result === 403) {
             return res.status(sc.FORBIDDEN).json({
                 status: sc.FORBIDDEN,
                 success: false,
                 message: "수정 권한 없음" //유저와 작성자가 다름
-            }); 
+            });
         }
         const group = await groupService.findGroupById(groupId);
         const editedBoard = await boardService.findBoard(group.boards, tag);
@@ -155,7 +169,7 @@ const editBoard = async (req: Request, res: Response) => {
  *  @desc delete board
  *  @access Private
  */
- const deleteBoard = async (req: Request, res: Response) => {
+const deleteBoard = async (req: Request, res: Response) => {
     const error = validationResult(req);
     if (!error.isEmpty()) {
         return res.status(sc.BAD_REQUEST).json({
@@ -167,14 +181,14 @@ const editBoard = async (req: Request, res: Response) => {
     try {
         const user = req.body.user;
         const tag = tagMatch[req.params.tag];
-        const deleteData = { 
+        const deleteData = {
             boardId: req.params.boardId,
             tag: tag
         };
         const groupId = req.params.groupId;
         const result = await boardService.deleteBoard(user.id, groupId, deleteData);
         if (result == 403) {
-            return res.status(sc.FORBIDDEN).json({ 
+            return res.status(sc.FORBIDDEN).json({
                 status: sc.FORBIDDEN,
                 success: false,
                 message: "삭제 권한이 없습니다."
