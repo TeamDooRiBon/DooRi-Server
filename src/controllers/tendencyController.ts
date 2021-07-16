@@ -196,8 +196,8 @@ const getAnswerCount = async (req: Request, res: Response) => {
 };
 
 /**
- *  @route GET /tendency/result/main
- *  @desc get main view test result
+ *  @route POST /tendency/result/main
+ *  @desc post main view test result
  *  @access Private
  */
 const getTendencyResult = async (req: Request, res: Response) => {
