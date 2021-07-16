@@ -193,6 +193,7 @@ const getTravelInformation = async (req: Request, res: Response) => {
                 travelName: group.travelName,
                 startDate: setTimeFormat(group.startDate),
                 endDate: setTimeFormat(group.endDate),
+                inviteCode: group.inviteCode,
                 destination: group.destination,
                 members: membersArray
             }
