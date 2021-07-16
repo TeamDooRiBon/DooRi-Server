@@ -14,60 +14,29 @@ const qs = require('qs');
 const getKakaoUser = async (req: Request, res: Response) => {
     let access_token = req.body.access_token;
     const refresh_token = req.body.refresh_token;
-    /**
-    * 클라이언트 없이 서버 테스트 시에는 이 주석을 푸세요.
-    const tokenData = await axios({
-        method: 'POST',
-        url: 'https://kauth.kakao.com/oauth/token',
-        headers: {
-            'content-type': 'application/x-www-form-urlencoded'
-        },
-        data: qs.stringify({
-            grant_type: 'authorization_code',//특정 스트링
-            client_id: config.CLIENT_ID,
-            client_secret: config.CLIENT_SECRET,
-            redirectUri: config.REDIRECT_URI,
-            code: req.query.code,
-        })//객체를 string 으로 변환
-    });
-  
-    let access_token = tokenData.data.access_token;
-    const refresh_token = tokenData.data.refresh_token;
-    
-    console.log(access_token);
-    console.log(refresh_token);
-    */
+
     try {
-        const tokenInfo = await axios({
-            method: 'GET',
-            url: 'https://kapi.kakao.com/v1/user/access_token_info',
+        const newToken = await axios({
+            method: 'POST',
+            url: 'https://kauth.kakao.com/oauth/token',
             headers: {
-                'content-type': 'application/x-www-form-urlencoded',
-                'Authorization': `Bearer ${access_token}`
+                'content-type': 'application/x-www-form-urlencoded'
             },
-        });
-        if (tokenInfo.status != 200) {
-            const newToken = await axios({
-                method: 'POST',
-                url: 'https://kauth.kakao.com/oauth/token',
-                headers: {
-                    'content-type': 'application/x-www-form-urlencoded'
-                },
-                data: qs.stringify({
-                    grant_type: 'refresh_token',//특정 스트링
-                    client_id: config.CLIENT_ID,
-                    refresh_token: refresh_token,
-                })//객체를 string 으로 변환
-            }); 
-            if (newToken.status != 200) {   
-                return res.status(sc.UNAUTHORIZED).json({ 
-                    status: sc.UNAUTHORIZED, 
-                    success: false, 
-                    message: "유효하지 않은 토큰"   
-                });  // refresh token으로도 갱신되지 않는 경우 401 반환
-            }
-            access_token = newToken.data.access_token;
-        }  // 토큰 유효하지 않음
+            data: qs.stringify({
+                grant_type: 'refresh_token',//특정 스트링
+                client_id: config.CLIENT_ID,
+                refresh_token: refresh_token,
+            })//객체를 string 으로 변환
+        }); 
+
+        if (newToken.status != 200) {   
+            return res.status(sc.UNAUTHORIZED).json({ 
+                status: sc.UNAUTHORIZED, 
+                success: false, 
+                message: "유효하지 않은 토큰"   
+            });  // refresh token으로도 갱신되지 않는 경우 401 반환
+        }
+        access_token = newToken.data.access_token;
         const user = await axios({
             method: 'GET',
             url: 'https://kapi.kakao.com/v2/user/me',
