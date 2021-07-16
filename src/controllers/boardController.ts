@@ -33,7 +33,7 @@ const makeBoard = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "잘못된 그룹 id 입니다."
+                message: "잘못된 그룹 id입니다."
             })   
         }
         const data = {
@@ -87,7 +87,7 @@ const getBoard = async (req: Request, res: Response) => {
             return res.status(sc.NOT_FOUND).json({
                 status: sc.NOT_FOUND,
                 success: false,
-                message: "잘못된 그룹 id 입니다."
+                message: "잘못된 그룹 id입니다."
             })   
         }
         const boardList = await boardService.findBoard(group.boards, tag);
