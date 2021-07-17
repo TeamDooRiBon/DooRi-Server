@@ -32,6 +32,11 @@
 ### 🛠 Server Architecture
 ![image](https://user-images.githubusercontent.com/20807197/124567491-0457ae00-de7f-11eb-8a40-b67ee7382f9c.png)
 
+### 📋 Model Diagram
+
+![DooRibonDiagram](https://user-images.githubusercontent.com/20807197/126026946-85537a63-b27a-4597-9971-4a9438fbb67a.png)
+
+
 ### ⚙️ Dependencies Module
 ```
 "devDependencies": {
@@ -54,6 +59,7 @@
     "qs": "^6.10.1"
   }
   ```
+  
 ### 📌 Branch Strategy
 
 <details>
