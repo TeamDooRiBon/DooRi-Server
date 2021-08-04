@@ -106,9 +106,11 @@ const addResult = async (req: Request, res: Response) => {
  *  @access Private
  */
 const getAllResult = async (req: Request, res: Response) => {
-    try {   
-        const myResult = await tendencyService.getMyResult(req.params.groupId, req.body.user.id);
-        const othersResult = await tendencyService.getOtherResult(req.params.groupId, req.body.user.id);
+    try {  
+        const [myResult, othersResult] = await Promise.all([
+            tendencyService.getMyResult(req.params.groupId, req.body.user.id),
+            tendencyService.getOtherResult(req.params.groupId, req.body.user.id),
+        ]);
 
         res.status(sc.OK).json({
             status: sc.OK,
