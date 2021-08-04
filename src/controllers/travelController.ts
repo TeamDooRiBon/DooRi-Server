@@ -55,6 +55,23 @@ const makeTravel = async (req: Request, res: Response) => {
     }
 };
 
+const setTravelArray = async (travels, allTravels, name) => {
+    travels.map((t) => {
+        let memberNames = [];
+        t.members.map((name) => {
+            memberNames.push(name["name"]);
+        });
+        allTravels.get(name).push({
+            _id: t._id,
+            startDate: setTimeFormat(t.startDate),
+            endDate: setTimeFormat(t.endDate),
+            travelName: t.travelName,
+            image: t.image,
+            destination: t.destination,
+            members: memberNames
+        });
+    });
+};
 /**
  *  @route GET /travel
  *  @desc GET allTravel
@@ -88,54 +105,9 @@ const getTravel = async (req: Request, res: Response) => {
             allTravels.set(whenTravel[i], []);
         }
 
-        travels.nowTravels.map((t) => {
-            let memberNames = [];
-            t.members.map((name) => {
-                memberNames.push(name["name"]);
-            });
-            let nowTravelData = {
-                _id: t._id,
-                startDate: setTimeFormat(t.startDate),
-                endDate: setTimeFormat(t.endDate),
-                travelName: t.travelName,
-                image: t.image,
-                destination: t.destination,
-                members: memberNames
-            };
-            allTravels.get("nowTravels").push(nowTravelData);
-        });
-        travels.comeTravels.map((t) => {
-            let memberNames = [];
-            t.members.map((name) => {
-                memberNames.push(name["name"]);
-            });
-            let comeTravelData = {
-                _id: t._id,
-                startDate: setTimeFormat(t.startDate),
-                endDate: setTimeFormat(t.endDate),
-                travelName: t.travelName,
-                image: t.image,
-                destination: t.destination,
-                members: memberNames
-            };
-            allTravels.get("comeTravels").push(comeTravelData);
-        });
-        travels.endTravels.map((t) => {
-            let memberNames = [];
-            t.members.map((name) => {
-                memberNames.push(name["name"]);
-            });
-            let endTravelData = {
-                _id: t._id,
-                startDate: setTimeFormat(t.startDate),
-                endDate: setTimeFormat(t.endDate),
-                travelName: t.travelName,
-                image: t.image,
-                destination: t.destination,
-                members: memberNames
-            };
-            allTravels.get("endTravels").push(endTravelData);
-        });
+        setTravelArray(travels.nowTravels, allTravels, "nowTravels");
+        setTravelArray(travels.comeTravels, allTravels, "comeTravels");
+        setTravelArray(travels.endTravels, allTravels, "endTravels");
 
         const data = Array.from(allTravels, ([when, group]) => ({ when, group }));
 
